@@ -187,6 +187,9 @@ GEM
       ffi (~> 1.12)
     shoulda-matchers (5.1.0)
       activesupport (>= 5.2.0)
+    spring (4.0.0)
+    spring-commands-rspec (1.0.4)
+      spring (>= 0.9.1)
     strscan (3.0.1)
     thor (1.2.1)
     timeout (0.2.0)
@@ -215,6 +218,8 @@ DEPENDENCIES
   rails (~> 7.0.1)
   rspec-rails (~> 5.0.0)
   shoulda-matchers (~> 5.0)
+  spring
+  spring-commands-rspec
   tzinfo-data
 
 RUBY VERSION
