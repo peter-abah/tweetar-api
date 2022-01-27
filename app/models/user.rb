@@ -5,5 +5,5 @@ class User < ApplicationRecord
   validates :password, presence: true, length: { minimum: 8 }
   validates :first_name, presence: true, length: { minimum: 2 }
   validates :last_name, presence: true, length: { minimum: 2 }
-  validates :bio, length: { minimum: 2 }
+  validates :bio, length: { minimum: 2 }, allow_blank: true
 end
