@@ -6,4 +6,15 @@ class User < ApplicationRecord
   validates :first_name, presence: true, length: { minimum: 2 }
   validates :last_name, presence: true, length: { minimum: 2 }
   validates :bio, length: { minimum: 2 }, allow_blank: true
+
+  def as_json(options={})
+    {
+      id: id,
+      username: username,
+      first_name: first_name,
+      last_name: last_name,
+      bio: bio,
+      token: AuthenticationTokenService.call(id)
+    }
+  end
 end
