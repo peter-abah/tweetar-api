@@ -10,6 +10,7 @@
 #  bio             :text
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  email           :string
 #
 
 FactoryBot.define do
