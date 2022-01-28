@@ -13,5 +13,13 @@
 require 'rails_helper'
 
 RSpec.describe Tweet, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'associations' do
+    it { should belong_to(:parent).class_name('Tweet') }
+    it { should have_many(:tweets) }
+  end
+
+  describe 'validations' do
+    it { should validate_presence_of(:body) }
+    it { should validate_length_of(:body, minimun: 2, maximum: 250) }
+  end
 end
