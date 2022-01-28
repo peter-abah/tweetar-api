@@ -13,6 +13,7 @@ RSpec.describe 'Authentications', type: :request do
                                                 'first_name' => user.first_name,
                                                 'last_name' => user.last_name,
                                                 'bio' => nil,
+                                                'email' => user.email,
                                                 'token' => AuthenticationTokenService.call(user.id)
                                               })
     end

@@ -30,7 +30,8 @@ class User < ApplicationRecord
       first_name: first_name,
       last_name: last_name,
       bio: bio,
-      token: AuthenticationTokenService.call(id)
+      token: AuthenticationTokenService.call(id),
+      email: email
     }
   end
 end
