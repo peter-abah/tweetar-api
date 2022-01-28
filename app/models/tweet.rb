@@ -11,4 +11,8 @@
 #
 
 class Tweet < ApplicationRecord
+  validates :body, presence: true, length: {in: 2..250}
+
+  belongs_to :parent, class_name: 'Tweet', optional: true
+  has_many :replies, foreign_key: 'parent_id', class_name: 'Tweet'
 end

@@ -14,12 +14,13 @@ require 'rails_helper'
 
 RSpec.describe Tweet, type: :model do
   describe 'associations' do
-    it { should belong_to(:parent).class_name('Tweet') }
-    it { should have_many(:tweets) }
+    it { should belong_to(:parent).class_name('Tweet').optional }
+    it { should have_many(:replies).class_name('Tweet') }
   end
 
   describe 'validations' do
     it { should validate_presence_of(:body) }
-    it { should validate_length_of(:body, minimun: 2, maximum: 250) }
+    it { should validate_length_of(:body).is_at_least(2) }
+    it { should validate_length_of(:body).is_at_most(250) }
   end
 end
