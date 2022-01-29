@@ -30,7 +30,7 @@ RSpec.describe 'Users', type: :request do
     end
   end
 
-  describe 'GET /users' do
+  describe 'GET /users/:id' do
     let(:user) { FactoryBot.create(:user, username: 'auser') }
 
     it 'returns the correct user' do
@@ -40,6 +40,40 @@ RSpec.describe 'Users', type: :request do
 
       expect(response).to have_http_status(:ok)
       expect(json['username']).to eq('auser')
+    end
+  end
+
+  describe 'PATCH /users/:id' do
+    let!(:user) { FactoryBot.create(:user, first_name: 'first', last_name: 'last') }
+    let!(:user1) { FactoryBot.create(:user) }
+
+    it 'returns unauthorized if authentication header is missing' do
+      patch "/api/v1/users/#{user.id}", params: { user: { first_name: 'update' } }
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'returns unauthorized if authentication token is invalid' do
+      patch "/api/v1/users/#{user.id}", params: { user: { first_name: 'update' } },
+                                        headers: { 'Authorization' => 'awrongtoken123456' }
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'returns forbidden if token does not correspond to user' do
+      patch "/api/v1/users/#{user.id}", params: { user: { first_name: 'update' } },
+                                        headers: { 'Authorization' => AuthenticationTokenService.call(user1.id) }
+      expect(response).to have_http_status(:forbidden)
+    end
+
+    it 'updates the user if authenticated' do
+      patch "/api/v1/users/#{user.id}", params: { user: { first_name: 'update' } },
+                                        headers: { 'Authorization' => AuthenticationTokenService.call(user.id) }
+
+      json = JSON.parse(response.body)
+      updated_user = User.find(user.id)
+
+      expect(response).to have_http_status(:ok)
+      expect(json['first_name']).to eq('update')
+      expect(updated_user.first_name).to eq('update')
     end
   end
 end
