@@ -29,4 +29,17 @@ RSpec.describe 'Users', type: :request do
       expect(JSON.parse(response.body).size).to eq(10)
     end
   end
+
+  describe 'GET /users' do
+    let(:user) { FactoryBot.create(:user, username: 'auser') }
+
+    it 'returns the correct user' do
+      get "/api/v1/users/#{user.id}"
+
+      json = JSON.parse(response.body)
+
+      expect(response).to have_http_status(:ok)
+      expect(json['username']).to eq('auser')
+    end
+  end
 end

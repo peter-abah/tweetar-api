@@ -15,7 +15,15 @@ module Api
         end
       end
 
+      def show
+        render json: user, status: :ok
+      end
+
       private
+
+      def user
+        User.find(params[:id])
+      end
 
       def user_params
         params.require(:user).permit(:username, :password, :first_name, :last_name, :email)
