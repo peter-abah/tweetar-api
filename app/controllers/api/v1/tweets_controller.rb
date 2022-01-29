@@ -1,7 +1,7 @@
 module Api
   module V1
     class TweetsController < ApplicationController
-      before_action :authenticate_request!, only: %i[create update]
+      before_action :authenticate_request!, only: %i[create update destroy]
 
       def index
         tweets = Tweet.all
@@ -30,6 +30,12 @@ module Api
         else
           render json: { error: user.errors.full_messages.first }, status: :unprocessable_entity
         end
+      end
+
+      def destroy
+        tweet = @current_user.tweets.find(params[:id])
+        tweet.destroy
+        render status: :no_content
       end
 
       private

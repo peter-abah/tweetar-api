@@ -89,4 +89,31 @@ RSpec.describe "Tweets", type: :request do
       expect(updated_tweet.body).to eq('update')
     end
   end
+
+  describe 'DELETE /tweets/:id' do
+    let!(:user2) { FactoryBot.create(:user) }
+    let!(:tweet) { FactoryBot.create(:tweet, user: user) }
+
+    it 'returns unauthorized if authentication header is missing' do
+      delete "/api/v1/tweets/#{tweet.id}"
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'returns unauthorized if authentication token is invalid' do
+      delete "/api/v1/tweets/#{tweet.id}", headers: { 'Authorization' => 'awrongtoken123456' }
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'returns not_found if the user tweet is not found' do
+      delete "/api/v1/tweets/#{tweet.id}", headers: { 'Authorization' => AuthenticationTokenService.call(user2.id) }
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it 'delete tweet if user is authorized' do
+      delete "/api/v1/tweets/#{tweet.id}", headers: { 'Authorization' => AuthenticationTokenService.call(user.id) }
+
+      expect(response).to have_http_status(:no_content)
+      expect(Tweet.exists?(tweet.id)).to eq(false)
+    end
+  end
 end
