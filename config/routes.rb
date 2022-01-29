@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       post 'register', to: 'users#create'
 
       resources :tweets, except: %i[edit new]
+      get 'tweets/:id/replies', to: 'tweets#replies'
     end
   end
 end

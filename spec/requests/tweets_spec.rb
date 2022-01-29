@@ -116,4 +116,16 @@ RSpec.describe "Tweets", type: :request do
       expect(Tweet.exists?(tweet.id)).to eq(false)
     end
   end
+
+  describe 'GET /tweets/:id/replies' do
+    let!(:tweet) { FactoryBot.create(:tweet, user: user) }
+    let!(:replies) { FactoryBot.create_list(:tweet, 10, user: user, parent_id: tweet.id) }
+
+    it 'returns replies of a tweet' do
+      get "/api/v1/tweets/#{tweet.id}/replies"
+
+      expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body).size).to eq(10)
+    end
+  end
 end

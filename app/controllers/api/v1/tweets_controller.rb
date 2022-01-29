@@ -38,6 +38,10 @@ module Api
         render status: :no_content
       end
 
+      def replies
+        render json: tweet.replies, status: :ok
+      end
+
       private
 
       def tweet
