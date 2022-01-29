@@ -18,4 +18,15 @@ RSpec.describe 'Users', type: :request do
                                               })
     end
   end
+
+  describe 'GET /users' do
+    let!(:users) { FactoryBot.create_list(:user, 10) }
+
+    it 'returns the correct number of users' do
+      get '/api/v1/users'
+
+      expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body).size).to eq(10)
+    end
+  end
 end
