@@ -37,6 +37,7 @@ gem 'image_processing', '~> 1.2'
 gem 'email_validator'
 gem 'jwt'
 gem 'rack-cors'
+gem 'faker'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -54,6 +55,5 @@ end
 group :test do
   gem 'database_cleaner-active_record'
   gem 'factory_bot_rails'
-  gem 'faker'
   gem 'shoulda-matchers', '~> 5.0'
 end

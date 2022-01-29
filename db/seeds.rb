@@ -5,3 +5,18 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
+
+require_relative './seeds/seed_tweets'
+require_relative './seeds/seed_users'
+
+puts 'STARTING SEEDING...'
+
+puts 'SEEDING USERS...'
+seed_users
+puts 'SEEDING USERS COMPLETE'
+
+puts 'SEEDING TWEETS...'
+seed_tweets
+puts 'SEEDING TWEETS COMPLETE'
+
+puts 'SEEDING COMPLETE'
