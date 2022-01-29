@@ -55,4 +55,38 @@ RSpec.describe "Tweets", type: :request do
       expect(new_tweet.user).to eql(user)
     end
   end
+
+  describe 'PATCH /tweets/:id' do
+    let!(:user2) { FactoryBot.create(:user) }
+    let!(:tweet) { FactoryBot.create(:tweet, user: user) }
+
+    it 'returns unauthorized if authentication header is missing' do
+      patch "/api/v1/tweets/#{tweet.id}", params: { tweet: { body: 'update' } }
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'returns unauthorized if authentication token is invalid' do
+      patch "/api/v1/tweets/#{tweet.id}", params: { tweet: { body: 'update' } }, 
+                                          headers: { 'Authorization' => 'awrongtoken123456' }
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'returns not_found if the user tweet is not found' do
+      patch "/api/v1/tweets/#{tweet.id}", params: { tweet: { body: 'update' } }, 
+                                          headers: { 'Authorization' => AuthenticationTokenService.call(user2.id) }
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it 'updates tweet if user is authorized' do
+      patch "/api/v1/tweets/#{tweet.id}", params: { tweet: { body: 'update' } }, 
+                                          headers: { 'Authorization' => AuthenticationTokenService.call(user.id) }
+
+      json = JSON.parse(response.body)
+      updated_tweet = Tweet.find(tweet.id)
+
+      expect(response).to have_http_status(:ok)
+      expect(json['body']).to eq('update')
+      expect(updated_tweet.body).to eq('update')
+    end
+  end
 end
