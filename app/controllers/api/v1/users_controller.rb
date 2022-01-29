@@ -1,7 +1,7 @@
 module Api
   module V1
     class UsersController < ApplicationController
-      before_action :authenticate_request!, only: [:update]
+      before_action :authenticate_request!, only: %i[update destroy]
 
       def index
         users = User.all
@@ -33,6 +33,16 @@ module Api
           pp @current_user.errors.full_messages, user_params
           render json: { error: @current_user.errors.full_messages.first }, status: :unprocessable_entity
         end
+      end
+
+      def destroy
+        if user != @current_user
+          render json: { error: 'forbidden' }, status: :forbidden
+          return
+        end
+
+        @current_user.destroy
+        render status: :no_content
       end
 
       private

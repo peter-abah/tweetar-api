@@ -76,4 +76,31 @@ RSpec.describe 'Users', type: :request do
       expect(updated_user.first_name).to eq('update')
     end
   end
+
+  describe 'DELETE /users/:id' do
+    let!(:user) { FactoryBot.create(:user, first_name: 'first', last_name: 'last') }
+    let!(:user1) { FactoryBot.create(:user) }
+
+    it 'returns unauthorized if authentication header is missing' do
+      delete "/api/v1/users/#{user.id}"
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'returns unauthorized if authentication token is invalid' do
+      delete "/api/v1/users/#{user.id}", headers: { 'Authorization' => 'awrongtoken123456' }
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'returns forbidden if token does not correspond to user' do
+      delete "/api/v1/users/#{user.id}", headers: { 'Authorization' => AuthenticationTokenService.call(user1.id) }
+      expect(response).to have_http_status(:forbidden)
+    end
+
+    it 'updates the user if authenticated' do
+      delete "/api/v1/users/#{user.id}", headers: { 'Authorization' => AuthenticationTokenService.call(user.id) }
+
+      expect(response).to have_http_status(:no_content)
+      expect(User.exists?(user.id)).to eq(false)
+    end
+  end
 end
