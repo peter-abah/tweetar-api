@@ -23,6 +23,8 @@ class User < ApplicationRecord
   validates :bio, length: { minimum: 2 }, allow_blank: true
   validates :email, presence: true, email: true
 
+  has_many :tweets
+
   def as_json(options={})
     {
       id: id,

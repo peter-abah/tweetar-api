@@ -4,7 +4,7 @@ Rails.application.routes.draw do
       post 'login', to: 'authentication#create'
       post 'register', to: 'users#create'
 
-      resources :tweets, only: [:index, :show]
+      resources :tweets, only: %i[index show create]
     end
   end
 end

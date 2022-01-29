@@ -18,7 +18,7 @@ class ApplicationController < ActionController::API
   end
 
   def authenticate_request!
-    return invalid_authentication if !payload || !AuthenticationTokenService.valid_payload(payload.first)
+    return invalid_authentication if !payload || !AuthenticationTokenService.valid_payload(payload)
 
     current_user!
     invalid_authentication unless @current_user
