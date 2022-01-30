@@ -11,7 +11,7 @@ module Api
       def create
         user = User.create(user_params)
         if user.save
-          render json: user, status: :created
+          render json: user.as_json({}, add_token: true), status: :created
         else
           render json: { error: user.errors.full_messages.first }, status: :unprocessable_entity
         end
@@ -28,7 +28,7 @@ module Api
         end
 
         if @current_user.update(user_params)
-          render json: user, status: :ok
+          render json: user.as_json({}, add_token: true), status: :ok
         else
           pp @current_user.errors.full_messages, user_params
           render json: { error: @current_user.errors.full_messages.first }, status: :unprocessable_entity

@@ -10,7 +10,7 @@ module Api
         if user
           raise AuthenticationError unless user.authenticate(params.require(:password))
 
-          render json: user, status: :created
+          render json: user.as_json({}, add_token: true), status: :created
         else
           render json: { error: 'No such user' }, status: :unauthorized
         end

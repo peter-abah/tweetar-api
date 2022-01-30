@@ -1,4 +1,5 @@
 require 'rails_helper'
+require_relative './compare_hash'
 
 RSpec.describe 'Authentications', type: :request do
   describe 'POST /login' do
@@ -6,30 +7,38 @@ RSpec.describe 'Authentications', type: :request do
 
     it 'authenticates the user with username' do
       post '/api/v1/login', params: { username: 'user1', password: 'password' }
+
+      json = JSON.parse(response.body)
+      expected = {
+        'id' => user.id,
+        'username' => 'user1',
+        'first_name' => user.first_name,
+        'last_name' => user.last_name,
+        'bio' => nil,
+        'email' => 'user@email.com',
+        'token' => AuthenticationTokenService.call(user.id)
+      }
+      pp json, expected
       expect(response).to have_http_status(:created)
-      expect(JSON.parse(response.body)).to eq({
-                                                'id' => user.id,
-                                                'username' => 'user1',
-                                                'first_name' => user.first_name,
-                                                'last_name' => user.last_name,
-                                                'bio' => nil,
-                                                'email' => 'user@email.com',
-                                                'token' => AuthenticationTokenService.call(user.id)
-                                              })
+      expect(compare_hash(expected, json)).to be true
     end
 
     it 'authenticates the user with email' do
       post '/api/v1/login', params: { email: 'user@email.com', password: 'password' }
+
+      json = JSON.parse(response.body)
+      expected = {
+        'id' => user.id,
+        'username' => 'user1',
+        'first_name' => user.first_name,
+        'last_name' => user.last_name,
+        'bio' => nil,
+        'email' => 'user@email.com',
+        'token' => AuthenticationTokenService.call(user.id)
+      }
+
       expect(response).to have_http_status(:created)
-      expect(JSON.parse(response.body)).to eq({
-                                                'id' => user.id,
-                                                'username' => 'user1',
-                                                'first_name' => user.first_name,
-                                                'last_name' => user.last_name,
-                                                'bio' => nil,
-                                                'email' => 'user@email.com',
-                                                'token' => AuthenticationTokenService.call(user.id)
-                                              })
+      expect(compare_hash(expected, json)).to be true
     end
 
     it 'returns error when username does not exist' do

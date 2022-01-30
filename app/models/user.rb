@@ -25,15 +25,8 @@ class User < ApplicationRecord
 
   has_many :tweets
 
-  def as_json(options={})
-    {
-      id: id,
-      username: username,
-      first_name: first_name,
-      last_name: last_name,
-      bio: bio,
-      token: AuthenticationTokenService.call(id),
-      email: email
-    }
+  def as_json(options = {}, add_token: false)
+    user_token = add_token ? { token: AuthenticationTokenService.call(id) } : {}
+    super(except: :password_digest).merge(user_token)
   end
 end
