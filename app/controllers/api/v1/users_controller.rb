@@ -1,10 +1,12 @@
 module Api
   module V1
     class UsersController < ApplicationController
+      include Paginate
+
       before_action :authenticate_request!, only: %i[update destroy]
 
       def index
-        users = User.all
+        users = paginate(params)
         render json: UsersRepresenter.new(users).as_json, status: :ok
       end
 

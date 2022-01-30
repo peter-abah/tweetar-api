@@ -25,13 +25,20 @@ RSpec.describe 'Users', type: :request do
   end
 
   describe 'GET /users' do
-    let!(:users) { FactoryBot.create_list(:user, 10) }
+    let!(:users) { FactoryBot.create_list(:user, 50) }
 
-    it 'returns the correct number of users' do
+    it 'returns the correct number of users (25 is the default number)' do
       get '/api/v1/users'
 
       expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body).size).to eq(10)
+      expect(JSON.parse(response.body).size).to eq(25)
+    end
+
+    it 'returns the correct number of users if number is specified' do
+      get '/api/v1/users', params: { no: 5 }
+
+      expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body).size).to eq(5)
     end
   end
 
