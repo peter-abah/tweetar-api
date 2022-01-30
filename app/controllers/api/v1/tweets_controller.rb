@@ -1,10 +1,12 @@
 module Api
   module V1
     class TweetsController < ApplicationController
+      include Paginate
+
       before_action :authenticate_request!, only: %i[create update destroy]
 
       def index
-        tweets = Tweet.all
+        tweets = paginate(params)
         render json: tweets, status: :ok
       end
 
