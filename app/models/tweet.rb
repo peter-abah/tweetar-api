@@ -16,4 +16,13 @@ class Tweet < ApplicationRecord
   belongs_to :user
   belongs_to :parent, class_name: 'Tweet', optional: true
   has_many :replies, foreign_key: 'parent_id', class_name: 'Tweet'
+
+  def as_json(options = {})
+    extra_data = {
+      # not using the include option since it will send the users password digest
+      user: user.as_json,
+      replies_no: replies.size
+    }
+    super(options).merge(extra_data)
+  end
 end
