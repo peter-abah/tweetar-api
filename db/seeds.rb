@@ -6,14 +6,22 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
+require 'database_cleaner-active_record'
 require_relative './seeds/seed_tweets'
 require_relative './seeds/seed_users'
+require_relative './seeds/seed_followers'
+
+DatabaseCleaner.clean_with(:truncation)
 
 puts 'STARTING SEEDING...'
 
 puts 'SEEDING USERS...'
 seed_users
 puts 'SEEDING USERS COMPLETE'
+
+puts 'SEEDING FOLLOWERS...'
+seed_followers
+puts 'SEEDING FOLLOWERS COMPLETE'
 
 puts 'SEEDING TWEETS...'
 seed_tweets
