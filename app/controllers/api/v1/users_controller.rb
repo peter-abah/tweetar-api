@@ -6,7 +6,7 @@ module Api
       before_action :authenticate_request!, only: %i[update destroy]
 
       def index
-        users = paginate(params)
+        users = paginate(User.all)
         render json: UsersRepresenter.new(users).as_json, status: :ok
       end
 

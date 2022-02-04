@@ -6,7 +6,7 @@ module Api
       before_action :authenticate_request!, only: %i[create update destroy]
 
       def index
-        tweets = paginate(params)
+        tweets = paginate(Tweet.all)
         render json: tweets, status: :ok
       end
 

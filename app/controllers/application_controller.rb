@@ -18,9 +18,13 @@ class ApplicationController < ActionController::API
   end
 
   def authenticate_request!
-    return invalid_authentication if !payload || !AuthenticationTokenService.valid_payload(payload)
+    return invalid_authentication unless user_signed_id?
 
     current_user!
     invalid_authentication unless @current_user
+  end
+
+  def user_signed_id?
+    payload && AuthenticationTokenService.valid_payload(payload)
   end
 end
