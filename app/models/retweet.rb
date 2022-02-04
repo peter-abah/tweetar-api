@@ -15,4 +15,9 @@ class Retweet < ApplicationRecord
 
   belongs_to :user
   belongs_to :tweet
+
+  def as_json(options={})
+    options = options.merge(include: %i[tweet user])
+    super(options)
+  end
 end
