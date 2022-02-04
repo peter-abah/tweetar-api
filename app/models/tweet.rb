@@ -16,6 +16,7 @@ class Tweet < ApplicationRecord
   belongs_to :user
   belongs_to :parent, class_name: 'Tweet', optional: true
   has_many :replies, foreign_key: 'parent_id', class_name: 'Tweet'
+  has_many :retweets
 
   def as_json(options = {})
     extra_data = {
