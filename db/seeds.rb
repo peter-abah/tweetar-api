@@ -12,8 +12,6 @@ require_relative './seeds/seed_users'
 require_relative './seeds/seed_followers'
 require_relative './seeds/seed_retweets'
 
-DatabaseCleaner.clean_with(:truncation)
-
 puts 'STARTING SEEDING...'
 
 puts 'SEEDING USERS...'
