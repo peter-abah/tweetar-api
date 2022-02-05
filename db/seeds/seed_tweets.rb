@@ -4,7 +4,7 @@ def create_tweet(user)
   })
 end
 
-def seed_tweets(n = 10)
+def seed_tweets(n = 50)
   User.all.each do |user|
     0.upto(n) { create_tweet(user) }
   end

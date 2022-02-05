@@ -10,6 +10,7 @@ require 'database_cleaner-active_record'
 require_relative './seeds/seed_tweets'
 require_relative './seeds/seed_users'
 require_relative './seeds/seed_followers'
+require_relative './seeds/seed_retweets'
 
 DatabaseCleaner.clean_with(:truncation)
 
@@ -26,5 +27,9 @@ puts 'SEEDING FOLLOWERS COMPLETE'
 puts 'SEEDING TWEETS...'
 seed_tweets
 puts 'SEEDING TWEETS COMPLETE'
+
+puts 'SEEDING RETWEETS...'
+seed_retweets
+puts 'SEEDING RETWEETS COMPLETE'
 
 puts 'SEEDING COMPLETE'
