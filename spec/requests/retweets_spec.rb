@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe "Retweets", type: :request do
-  let!(:user) { FactoryBot.create!(:user) }
-  let!(:tweets) { FactoryBot.create_list!(:tweet, 5, user: user) }
+  let!(:user) { FactoryBot.create(:user) }
+  let!(:tweets) { FactoryBot.create_list(:tweet, 5, user: user) }
   let(:tweet) { tweets.first }
   let!(:retweets) do
-    tweets.each { |tweet| Retweet.create!(user_id: user.id, tweet_id: tweet.id) }
+    tweets.map { |tweet| Retweet.create!(user_id: user.id, tweet_id: tweet.id) }
   end
   let(:retweet) { retweets.first }
 
@@ -42,8 +42,8 @@ RSpec.describe "Retweets", type: :request do
 
   describe 'POST /retweets' do
     it 'creates a new retweet' do
-      post '/api/v1/retweets', params: { user_id: user.id, tweet_id: tweet.id },
-                               headers: { 'Authentication': AuthenticationTokenService.call(user.id) }
+      post '/api/v1/retweets', params: { retweet: { user_id: user.id, tweet_id: tweet.id } },
+                               headers: { 'Authorization': AuthenticationTokenService.call(user.id) }
 
       updated_tweet = Tweet.find(tweet.id)
       updated_user = User.find(user.id)
@@ -60,14 +60,14 @@ RSpec.describe "Retweets", type: :request do
 
     it 'returns unauthorized if authorization is invalid' do
       post '/api/v1/retweets', params: { user_id: user.id, tweet_id: tweet.id },
-                               headers: { 'Authentication': 'awrongtoken123456' }
+                               headers: { 'Authorization': 'awrongtoken123456' }
       expect(response).to have_http_status(:unauthorized)
     end
   end
 
   describe 'DELETE /retweets/:retweet_id' do
     it 'deletes a particular tweet' do
-      delete "/api/v1/retweets/#{retweet.id}", headers: { 'Authentication': AuthenticationTokenService.call(user.id) }
+      delete "/api/v1/retweets/#{retweet.id}", headers: { 'Authorization': AuthenticationTokenService.call(user.id) }
 
       updated_user = User.find(user.id)
 
@@ -81,7 +81,7 @@ RSpec.describe "Retweets", type: :request do
     end
 
     it 'returns unauthorized if authorization is invalid' do
-      delete "/api/v1/retweets/#{retweet.id}", headers: { 'Authentication': 'awrongtoken123456' }
+      delete "/api/v1/retweets/#{retweet.id}", headers: { 'Authorization': 'awrongtoken123456' }
       expect(response).to have_http_status(:unauthorized)
     end
   end

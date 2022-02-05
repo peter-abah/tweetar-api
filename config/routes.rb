@@ -6,12 +6,12 @@ Rails.application.routes.draw do
 
       resources :users, except: %i[edit new]
       resources :tweets, except: %i[edit new]
+      resources :retweets, except: %i[edit new update]
       resources :feed, only: [:index]
       get 'tweets/:id/replies', to: 'tweets#replies'
 
       post 'follow', to: 'follows#create'
       delete 'follow', to: 'follows#destroy'
-      
     end
   end
 end
