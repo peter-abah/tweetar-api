@@ -15,4 +15,12 @@ class Like < ApplicationRecord
 
   belongs_to :user
   belongs_to :tweet, counter_cache: true
+
+  def as_json(options = {})
+    extra_data = {
+      tweet: tweet.as_json,
+      user: user.as_json
+    }
+    super(options).merge(extra_data)
+  end
 end
