@@ -21,12 +21,7 @@ class Tweet < ApplicationRecord
   has_many :retweets
 
   def as_json(options = {})
-    extra_data = {
-      # not using the include option since it will send the users password digest
-      user: user.as_json,
-      replies_no: replies.size,
-      retweets_no: retweets.size
-    }
-    super(options).merge(extra_data)
+    options = options.merge(user: { except: :password_digest })
+    super(options)
   end
 end

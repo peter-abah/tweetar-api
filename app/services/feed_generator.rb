@@ -23,7 +23,6 @@ class FeedGenerator
   # returns users that current_user follows and users that current_user
   # followed users follow
   def users
-    # Users.include(:followed_users, :tweets, :retweets).where(id: )
     followed_users = current_user.followed_users.includes(:followed_users)
     result = followed_users.reduce([]) { |acc, user| acc + user.followed_users }
     followed_users + result

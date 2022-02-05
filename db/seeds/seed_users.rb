@@ -1,4 +1,4 @@
-def seed_users(n = 100)
+def seed_users(n = 20)
   0.upto(n) do
     User.create!({
       username: Faker::Internet.unique.username,
@@ -6,7 +6,7 @@ def seed_users(n = 100)
       first_name: Faker::Name.first_name,
       last_name: Faker::Name.last_name,
       bio: 'I am a random user',
-      password: 'password',
+      password: 'password'
     })
   end
 end
