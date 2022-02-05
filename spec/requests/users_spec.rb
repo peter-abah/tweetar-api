@@ -15,7 +15,7 @@ RSpec.describe 'Users', type: :request do
         'token' => AuthenticationTokenService.call(User.last.id),
         'first_name' => 'first',
         'last_name' => 'last',
-        'bio' => nil,
+        'bio' => '',
         'email' => 'user1@email.com'
       }
 

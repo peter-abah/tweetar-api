@@ -10,6 +10,7 @@
 #  updated_at     :datetime         not null
 #  replies_count  :integer
 #  retweets_count :integer
+#  likes_count    :integer
 #
 
 FactoryBot.define do

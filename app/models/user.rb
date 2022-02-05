@@ -20,7 +20,7 @@ class User < ApplicationRecord
   validates :password, presence: true, length: { minimum: 8 }, on: :create
   validates :first_name, presence: true, length: { minimum: 2 }
   validates :last_name, presence: true, length: { minimum: 2 }
-  validates :bio, length: { minimum: 2 }, allow_blank: true
+  validates :bio, length: { maximum: 250 }
   validates :email, presence: true, email: true, uniqueness: true
 
   has_many :tweets
