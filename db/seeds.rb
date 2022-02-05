@@ -11,6 +11,7 @@ require_relative './seeds/seed_tweets'
 require_relative './seeds/seed_users'
 require_relative './seeds/seed_followers'
 require_relative './seeds/seed_retweets'
+require_relative './seeds/seed_likes'
 
 puts 'STARTING SEEDING...'
 
@@ -29,5 +30,9 @@ puts 'SEEDING TWEETS COMPLETE'
 puts 'SEEDING RETWEETS...'
 seed_retweets
 puts 'SEEDING RETWEETS COMPLETE'
+
+puts 'SEEDING LIKES...'
+seed_likes
+puts 'SEEDING LIKES COMPLETE'
 
 puts 'SEEDING COMPLETE'
