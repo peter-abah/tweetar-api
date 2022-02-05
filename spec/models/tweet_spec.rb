@@ -20,6 +20,7 @@ RSpec.describe Tweet, type: :model do
     it { should belong_to(:parent).class_name('Tweet').optional }
     it { should have_many(:replies).class_name('Tweet') }
     it { should have_many(:retweets) }
+    it { should have_many(:likes) }
   end
 
   describe 'validations' do

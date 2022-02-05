@@ -19,6 +19,7 @@ class Tweet < ApplicationRecord
   belongs_to :parent, class_name: 'Tweet', optional: true, counter_cache: :replies_count
   has_many :replies, foreign_key: 'parent_id', class_name: 'Tweet'
   has_many :retweets, -> { includes([:tweet]) }
+  has_many :likes
 
   def as_json(options = {})
     options = options.merge(user: { except: :password_digest })
