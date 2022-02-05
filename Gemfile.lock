@@ -73,6 +73,9 @@ GEM
     bootsnap (1.10.2)
       msgpack (~> 1.2)
     builder (3.2.4)
+    bullet (7.0.1)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.11)
     concurrent-ruby (1.1.9)
     crass (1.0.6)
     database_cleaner-active_record (2.0.1)
@@ -223,6 +226,7 @@ GEM
       concurrent-ruby (~> 1.0)
     tzinfo-data (1.2021.5)
       tzinfo (>= 1.0.0)
+    uniform_notifier (1.14.2)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -236,6 +240,7 @@ DEPENDENCIES
   annotate
   bcrypt (~> 3.1.7)
   bootsnap
+  bullet
   database_cleaner-active_record
   debug
   email_validator

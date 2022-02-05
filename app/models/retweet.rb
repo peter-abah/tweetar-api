@@ -14,7 +14,7 @@ class Retweet < ApplicationRecord
   validates :tweet_id, presence: true
 
   belongs_to :user
-  belongs_to :tweet
+  belongs_to :tweet, counter_cache: true
 
   def as_json(options={})
     options = options.merge(include: %i[tweet user])

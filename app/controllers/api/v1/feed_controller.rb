@@ -12,7 +12,7 @@ module Api
       private
 
       def generate_tweets
-        return FeedGenerator.call(current_user!) if user_signed_id?
+        return FeedGenerator.new(current_user!).feed if user_signed_id?
 
         Tweet.all
       end

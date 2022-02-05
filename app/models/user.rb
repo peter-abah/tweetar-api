@@ -29,7 +29,7 @@ class User < ApplicationRecord
   has_many :received_follows, foreign_key: :followed_id, class_name: 'Follow'
   has_many :sent_follows, foreign_key: :follower_id, class_name: 'Follow'
   has_many :followers, through: :received_follows, source: :follower
-  has_many :followed_users, through: :sent_follows, source: :followed
+  has_many :followed_users, -> { includes(:tweets, :retweets) }, through: :sent_follows, source: :followed
 
   def as_json(options = {})
     options = options.merge(except: :password_digest)
