@@ -23,7 +23,7 @@ class Tweet < ApplicationRecord
   has_many :likes
 
   def as_json(options = {})
-    options = options.merge(user: { except: :password_digest })
-    super(options)
+    extra_data = { user: user.as_json }
+    super(options).merge(extra_data)
   end
 end
