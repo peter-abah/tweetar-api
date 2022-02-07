@@ -76,6 +76,23 @@ RSpec.describe "Tweets", type: :request do
       expect(new_tweet.body).to eql('A tweet') # checks tweet is created
       expect(new_tweet.user).to eql(user)
     end
+
+    it 'creates a tweets with images' do
+      images = [
+        fixture_file_upload("1.jpg", "image/jpg"),
+        fixture_file_upload("2.jpg", "image/jpg")
+      ]
+
+      post '/api/v1/tweets/', params: { tweet: { body: 'A tweet', images: images } }, 
+                           headers: { 'Authorization' => AuthenticationTokenService.call(user.id) }
+
+      json = JSON.parse(response.body)
+      new_tweet = Tweet.find(json['id'])
+
+      expect(response).to have_http_status(:created)
+      expect(new_tweet.images).to be_attached
+      expect(new_tweet.images.size).to be 2
+    end
   end
 
   describe 'PATCH /tweets/:id' do

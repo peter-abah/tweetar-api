@@ -51,7 +51,7 @@ module Api
       end
 
       def tweet_params
-        params.require(:tweet).permit(:body)
+        params.require(:tweet).permit(:body, images: [])
       end
     end
   end
