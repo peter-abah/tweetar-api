@@ -27,6 +27,9 @@ class User < ApplicationRecord
   has_many :retweets
   has_many :likes
 
+  has_one_attached :profile_image
+  has_one_attached :cover_image
+
   has_many :received_follows, foreign_key: :followed_id, class_name: 'Follow'
   has_many :sent_follows, foreign_key: :follower_id, class_name: 'Follow'
   has_many :followers, through: :received_follows, source: :follower

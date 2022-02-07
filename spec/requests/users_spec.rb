@@ -9,7 +9,7 @@ RSpec.describe 'Users', type: :request do
                              email: 'user1@email.com' } }
 
       json = JSON.parse(response.body)
-      expected = { 
+      expected = {
         'id' => User.last.id,
         'username' => 'user1',
         'token' => AuthenticationTokenService.call(User.last.id),
@@ -86,6 +86,23 @@ RSpec.describe 'Users', type: :request do
       expect(response).to have_http_status(:ok)
       expect(json['first_name']).to eq('update')
       expect(updated_user.first_name).to eq('update')
+    end
+
+    it 'updates the user profile image' do
+      params = {
+        user: {
+          profile_image: fixture_file_upload("profile.webp", "image/webp"),
+          cover_image: fixture_file_upload("cover.webp", "image/webp")
+        }
+      }
+      patch "/api/v1/users/#{user.id}", params: params,
+                                        headers: { 'Authorization' => AuthenticationTokenService.call(user.id) }
+
+      updated_user = User.find(user.id)
+      expect(response).to have_http_status(:ok)
+
+      expect(updated_user.profile_image).to be_attached
+      expect(updated_user.cover_image).to be_attached
     end
   end
 
