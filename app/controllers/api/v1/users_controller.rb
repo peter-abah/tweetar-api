@@ -6,7 +6,10 @@ module Api
       before_action :authenticate_request!, only: %i[update destroy]
 
       def index
-        users = paginate(User.all)
+        users = paginate(User.all.includes(
+          profile_image_attachment: :blob,
+          cover_image_attachment: :blob
+        ))
         render json: UsersRepresenter.new(users).as_json, status: :ok
       end
 
@@ -50,7 +53,7 @@ module Api
       private
 
       def user
-        User.find(params[:id])
+        User.find(params[:id]).includes([:profile_image_attachment, :cover_image_attachment])
       end
 
       def user_params

@@ -6,7 +6,7 @@ module Api
       before_action :authenticate_request!, only: %i[create update destroy]
 
       def index
-        tweets = paginate(Tweet.all)
+        tweets = paginate(Tweet.all.includes(images_attachments: :blob))
         render json: tweets, status: :ok
       end
 
@@ -47,7 +47,7 @@ module Api
       private
 
       def tweet
-        Tweet.find(params[:id])
+        Tweet.find(params[:id]).includes(images_attachments: :blob)
       end
 
       def tweet_params
