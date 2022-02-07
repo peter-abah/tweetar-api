@@ -24,7 +24,7 @@ RSpec.describe "Likes", type: :request do
 
         json = JSON.parse(response.body)
         first_like_date = DateTime.parse(json[0]['updated_at'])
-        second_like_date = DateTIme.parse(json[1]['updated_at'])
+        second_like_date = DateTime.parse(json[1]['updated_at'])
 
         expect(response).to have_http_status(:ok)
         expect(first_like_date).to be >= second_like_date
@@ -37,17 +37,6 @@ RSpec.describe "Likes", type: :request do
 
         expect(response).to have_http_status(:ok)
         expect(JSON.parse(response.body).size).to eq(1)
-      end
-
-      it 'returns a sorted response (sorted by date descending)' do
-        get '/api/v1/likes', params: { tweet_id: tweet.id }
-
-        json = JSON.parse(response.body)
-        first_like_date = DateTime.parse(json[0]['updated_at'])
-        second_like_date = DateTIme.parse(json[1]['updated_at'])
-
-        expect(response).to have_http_status(:ok)
-        expect(first_like_date).to be >= second_like_date
       end
     end
   end

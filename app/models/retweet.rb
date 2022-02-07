@@ -16,6 +16,8 @@ class Retweet < ApplicationRecord
   belongs_to :user
   belongs_to :tweet, counter_cache: true
 
+  default_scope { order(updated_at: :desc) }
+
   def as_json(options = {})
     extra_data = {
       tweet: tweet.as_json,
