@@ -79,8 +79,8 @@ RSpec.describe "Tweets", type: :request do
 
     it 'creates a tweets with images' do
       images = [
-        fixture_file_upload("1.jpg", "image/jpg"),
-        fixture_file_upload("2.jpg", "image/jpg")
+        fixture_file_upload("1.jpg", "image/jpeg"),
+        fixture_file_upload("2.jpg", "image/jpeg")
       ]
 
       post '/api/v1/tweets/', params: { tweet: { body: 'A tweet', images: images } }, 

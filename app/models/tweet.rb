@@ -14,6 +14,8 @@
 #
 
 class Tweet < ApplicationRecord
+  include Rails.application.routes.url_helpers
+  
   validates :body, presence: true, length: { in: 2..250 }
 
   belongs_to :user
@@ -27,7 +29,9 @@ class Tweet < ApplicationRecord
   default_scope { order(updated_at: :desc) }
 
   def as_json(options = {})
-    extra_data = { user: user.as_json }
+    image_urls = images.map { |img| rails_blob_path(img, disposition: "attachment") }
+
+    extra_data = { user: user.as_json, image_urls: image_urls }
     super(options).merge(extra_data)
   end
 end
