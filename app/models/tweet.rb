@@ -8,9 +8,9 @@
 #  user_id        :integer
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
-#  replies_count  :integer
-#  retweets_count :integer
-#  likes_count    :integer
+#  replies_count  :integer          default("0")
+#  retweets_count :integer          default("0")
+#  likes_count    :integer          default("0")
 #
 
 class Tweet < ApplicationRecord

@@ -7,7 +7,7 @@
 #  first_name      :string
 #  last_name       :string
 #  password_digest :string
-#  bio             :text
+#  bio             :text             default("")
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  email           :string
