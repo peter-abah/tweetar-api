@@ -1,0 +1,19 @@
+---
+development:
+  cloud_name: dnhonv7gp
+  api_key: '726286988558255'
+  api_secret: YquyTSlEgA_4JXSBXSW4mR1cz34
+  enhance_image_tag: true
+  static_file_support: false
+production:
+  cloud_name: dnhonv7gp
+  api_key: '726286988558255'
+  api_secret: YquyTSlEgA_4JXSBXSW4mR1cz34
+  enhance_image_tag: true
+  static_file_support: true
+test:
+  cloud_name: dnhonv7gp
+  api_key: '726286988558255'
+  api_secret: YquyTSlEgA_4JXSBXSW4mR1cz34
+  enhance_image_tag: true
+  static_file_support: false
