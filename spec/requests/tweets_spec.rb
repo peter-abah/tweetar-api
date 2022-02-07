@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'date'
 
 RSpec.describe "Tweets", type: :request do
   let!(:user) { FactoryBot.create(:user) }
@@ -24,6 +25,17 @@ RSpec.describe "Tweets", type: :request do
       expect(response).to have_http_status(:ok)
       expect(json).not_to be_empty
       expect(json.size).to eql(5)
+    end
+
+    it 'returns a sorted response (sorted by date descending)' do
+      get '/api/v1/tweets'
+
+      json = JSON.parse(response.body)
+      first_tweet_date = DateTime.parse(json[0]['updated_at'])
+      second_tweet_date = DateTime.parse(json[1]['updated_at'])
+
+      expect(response).to have_http_status(:ok)
+      expect(first_tweet_date).to be >= second_tweet_date
     end
   end
 

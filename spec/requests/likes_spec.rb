@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'date'
 
 RSpec.describe "Likes", type: :request do
   let!(:user) { FactoryBot.create(:user) }
@@ -17,6 +18,17 @@ RSpec.describe "Likes", type: :request do
         expect(response).to have_http_status(:ok)
         expect(JSON.parse(response.body).size).to eq(5)
       end
+
+      it 'returns a sorted response (sorted by date descending)' do
+        get '/api/v1/likes', params: { user_id: user.id }
+
+        json = JSON.parse(response.body)
+        first_like_date = DateTime.parse(json[0]['updated_at'])
+        second_like_date = DateTIme.parse(json[1]['updated_at'])
+
+        expect(response).to have_http_status(:ok)
+        expect(first_like_date).to be >= second_like_date
+      end
     end
 
     context 'when tweet_id is provided' do
@@ -25,6 +37,17 @@ RSpec.describe "Likes", type: :request do
 
         expect(response).to have_http_status(:ok)
         expect(JSON.parse(response.body).size).to eq(1)
+      end
+
+      it 'returns a sorted response (sorted by date descending)' do
+        get '/api/v1/likes', params: { tweet_id: tweet.id }
+
+        json = JSON.parse(response.body)
+        first_like_date = DateTime.parse(json[0]['updated_at'])
+        second_like_date = DateTIme.parse(json[1]['updated_at'])
+
+        expect(response).to have_http_status(:ok)
+        expect(first_like_date).to be >= second_like_date
       end
     end
   end
