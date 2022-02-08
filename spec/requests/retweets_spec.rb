@@ -16,15 +16,15 @@ RSpec.describe "Retweets", type: :request do
         get '/api/v1/retweets', params: { user_id: user.id }
 
         expect(response).to have_http_status(:ok)
-        expect(JSON.parse(response.body).size).to eq(5)
+        expect(JSON.parse(response.body)['list'].size).to eq(5)
       end
 
       it 'returns a sorted response (sorted by date descending)' do
         get '/api/v1/retweets', params: { user_id: user.id }
   
-        json = JSON.parse(response.body)
-        first_retweet_date = DateTime.parse(json[0]['updated_at'])
-        second_retweet_date = DateTime.parse(json[1]['updated_at'])
+        list_json = JSON.parse(response.body)['list']
+        first_retweet_date = DateTime.parse(list_json[0]['updated_at'])
+        second_retweet_date = DateTime.parse(list_json[1]['updated_at'])
   
         expect(response).to have_http_status(:ok)
         expect(first_retweet_date).to be >= second_retweet_date
@@ -36,7 +36,7 @@ RSpec.describe "Retweets", type: :request do
         get '/api/v1/retweets', params: { tweet_id: tweet.id }
 
         expect(response).to have_http_status(:ok)
-        expect(JSON.parse(response.body).size).to eq(1)
+        expect(JSON.parse(response.body)['list'].size).to eq(1)
       end
     end
   end

@@ -31,14 +31,14 @@ RSpec.describe 'Users', type: :request do
       get '/api/v1/users'
 
       expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body).size).to eq(25)
+      expect(JSON.parse(response.body)['list'].size).to eq(25)
     end
 
     it 'returns the correct number of users if number is specified' do
       get '/api/v1/users', params: { no: 5 }
 
       expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body).size).to eq(5)
+      expect(JSON.parse(response.body)['list'].size).to eq(5)
     end
   end
 

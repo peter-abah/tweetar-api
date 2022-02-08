@@ -14,7 +14,7 @@ RSpec.describe "Tweets", type: :request do
 
       expect(response).to have_http_status(:ok)
       expect(json).not_to be_empty
-      expect(json.size).to eql(25)
+      expect(json['list'].size).to eql(25)
     end
 
     it 'returns the correct number of tweets if number is specified' do
@@ -24,15 +24,15 @@ RSpec.describe "Tweets", type: :request do
 
       expect(response).to have_http_status(:ok)
       expect(json).not_to be_empty
-      expect(json.size).to eql(5)
+      expect(json['list'].size).to eql(5)
     end
 
     it 'returns a sorted response (sorted by date descending)' do
       get '/api/v1/tweets'
 
-      json = JSON.parse(response.body)
-      first_tweet_date = DateTime.parse(json[0]['updated_at'])
-      second_tweet_date = DateTime.parse(json[1]['updated_at'])
+      list_json = JSON.parse(response.body)['list']
+      first_tweet_date = DateTime.parse(list_json[0]['updated_at'])
+      second_tweet_date = DateTime.parse(list_json[1]['updated_at'])
 
       expect(response).to have_http_status(:ok)
       expect(first_tweet_date).to be >= second_tweet_date
@@ -164,7 +164,7 @@ RSpec.describe "Tweets", type: :request do
       get "/api/v1/tweets/#{tweet.id}/replies"
 
       expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body).size).to eq(10)
+      expect(JSON.parse(response.body)['list'].size).to eq(10)
     end
   end
 end
