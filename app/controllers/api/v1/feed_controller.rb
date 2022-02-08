@@ -4,9 +4,8 @@ module Api
       include Paginate
 
       def index
-        tweets = generate_tweets
-        tweets = paginate(tweets)
-        render json: tweets, status: :ok
+        tweets = paginate generate_tweets
+        render json: TweetsRepresenter.new(tweets).as_json, status: :ok
       end
 
       private

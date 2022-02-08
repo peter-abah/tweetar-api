@@ -6,7 +6,7 @@ module Paginate
     if params[:page]
       collection.page(params[:page]).per(result_length)
     else
-      collection.limit(result_length)
+      collection.page.per(result_length)
     end
   end
 

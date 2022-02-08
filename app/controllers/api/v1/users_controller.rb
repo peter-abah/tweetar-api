@@ -16,7 +16,7 @@ module Api
       def create
         user = User.create(user_params)
         if user.save
-          render json: UserRepresenter.new(user).as_json(add_token: true), status: :created
+          render json: UserRepresenter.new(user, add_token: true).as_json, status: :created
         else
           render json: { error: user.errors.full_messages.first }, status: :unprocessable_entity
         end
@@ -33,9 +33,8 @@ module Api
         end
 
         if @current_user.update(user_params)
-          render json: UserRepresenter.new(user).as_json(add_token: true), status: :ok
+          render json: UserRepresenter.new(user, add_token: true).as_json, status: :ok
         else
-          pp @current_user.errors.full_messages, user_params
           render json: { error: @current_user.errors.full_messages.first }, status: :unprocessable_entity
         end
       end
