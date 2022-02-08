@@ -1,13 +1,14 @@
 # Returns a json representation of a list of users
 class UsersRepresenter
+  attr_reader :users
+
   def initialize(users)
     @users = users
   end
 
   def as_json(add_token: false)
     @users.map do |user|
-      user_token = add_token ? { token: AuthenticationTokenService.call(@user.id) } : {}
-      user_token.merge(user.as_json)
+      UserRepresenter.new(user).as_json(add_token: add_token)
     end
   end
 end

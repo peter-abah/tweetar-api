@@ -13,9 +13,9 @@ module Api
 
       def create
         tweet = @current_user.tweets.build(tweet_params)
-        tweet_json = TweetRepresenter.new(tweet, @current_user).as_json
 
         if tweet.save
+          tweet_json = TweetRepresenter.new(tweet, @current_user).as_json
           render json: tweet_json, status: :created
         else
           render json: { error: user.errors.full_messages.first }, status: :unprocessable_entity
@@ -53,7 +53,7 @@ module Api
       private
 
       def tweet
-        Tweet.find(params[:id]).includes(images_attachments: :blob)
+        Tweet.includes(images_attachments: :blob).find(params[:id])
       end
 
       def tweet_params

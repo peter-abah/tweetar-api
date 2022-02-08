@@ -1,5 +1,7 @@
 # Returns a json representation of tweet
 class TweetRepresenter
+  include Rails.application.routes.url_helpers
+  
   attr_reader :tweet, :user
 
   def initialize(tweet, user = nil)

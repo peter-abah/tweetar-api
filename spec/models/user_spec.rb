@@ -2,15 +2,17 @@
 #
 # Table name: users
 #
-#  id              :integer          not null, primary key
-#  username        :string
-#  first_name      :string
-#  last_name       :string
-#  password_digest :string
-#  bio             :text             default("")
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  email           :string
+#  id                   :integer          not null, primary key
+#  username             :string
+#  first_name           :string
+#  last_name            :string
+#  password_digest      :string
+#  bio                  :text             default("")
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  email                :string
+#  followers_count      :integer          default("0")
+#  followed_users_count :integer          default("0")
 #
 
 require 'rails_helper'

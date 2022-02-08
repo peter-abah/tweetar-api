@@ -53,7 +53,7 @@ module Api
       private
 
       def user
-        User.find(params[:id]).includes([:profile_image_attachment, :cover_image_attachment])
+        User.includes([:profile_image_attachment, :cover_image_attachment]).find(params[:id])
       end
 
       def user_params
