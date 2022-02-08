@@ -1,12 +1,31 @@
 # Returns a json representation of user
 class UserRepresenter
+  attr_reader :user, :add_token
+
   def initialize(user)
     @user = user
   end
 
   def as_json(add_token: false)
-    user_token = add_token ? { token: AuthenticationTokenService.call(@user.id) } : {}
-    user_token.merge(@user.as_json)
+    @add_token = add_token
+    user.as_json.merge(extra_data)
+  end
+
+  private
+
+  def extra_data
+    profile_image_url = user.profile_image.attached? ? rails_blob_path(profile_image, disposition: "attachment") : nil
+    cover_image_url = user.cover_image.attached? ? rails_blob_path(cover_image, disposition: "attachment") : nil
+
+    data = {
+      profile_image: profile_image_url,
+      cover_image: cover_image_url
+    }
+    data.merge(user_token)
+  end
+
+  def user_token
+    add_token ? { token: AuthenticationTokenService.call(user.id) } : {}
   end
 end
 

@@ -39,18 +39,6 @@ class User < ApplicationRecord
 
   def as_json(options = {})
     options = options.merge(except: :password_digest)
-    super(options).merge(extra_data)
-  end
-
-  private
-
-  def extra_data
-    profile_image_url = profile_image.attached? ? rails_blob_path(profile_image, disposition: "attachment") : nil
-    cover_image_url = cover_image.attached? ? rails_blob_path(cover_image, disposition: "attachment") : nil
-
-    {
-      profile_image: profile_image_url,
-      cover_image: cover_image_url
-    }
+    super(options)
   end
 end
