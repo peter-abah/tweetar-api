@@ -45,5 +45,12 @@ RSpec.describe User, type: :model do
     it { should validate_presence_of(:email) }
   end
 
+  describe '#name' do
+    let(:user) { FactoryBot.create(:user) }
 
+    it 'returns users full name' do
+      expected = "#{user.first_name} #{user.last_name}"
+      expect(user.name).to eq(expected)
+    end
+  end
 end

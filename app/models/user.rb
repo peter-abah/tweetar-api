@@ -38,7 +38,11 @@ class User < ApplicationRecord
   has_many :followed_users, -> { includes(%i[tweets retweets]) }, through: :sent_follows, source: :followed
 
   def as_json(options = {})
-    options = options.merge(except: :password_digest)
+    options = options.merge(except: :password_digest, methods: :name)
     super(options)
+  end
+
+  def name
+    "#{first_name} #{last_name}"
   end
 end
