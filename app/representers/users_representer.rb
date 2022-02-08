@@ -1,14 +1,16 @@
 # Returns a json representation of a list of users
-class UsersRepresenter
-  attr_reader :users
+class UsersRepresenter < ListRepresenter
+  attr_reader :add_token
 
-  def initialize(users)
-    @users = users
+  def initialize(list, add_token: false)
+    super(list)
+    @list = list
+    @add_token = add_token
   end
 
-  def as_json(add_token: false)
-    @users.map do |user|
-      UserRepresenter.new(user).as_json(add_token: add_token)
+  def list_json
+    list.map do |user|
+      UserRepresenter.new(user).as_json
     end
   end
 end

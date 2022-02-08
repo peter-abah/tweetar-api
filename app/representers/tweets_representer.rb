@@ -1,14 +1,14 @@
 # Returns a json representation of a list of users
-class TweetsRepresenter
-  attr_reader :tweets, :user
+class TweetsRepresenter < ListRepresenter
+  attr_reader :user
 
-  def initialize(tweets, user = nil)
-    @tweets = tweets
+  def initialize(list, user = nil)
+    super(list)
     @user = user
   end
 
-  def as_json
-    tweets.map do |tweet|
+  def list_json
+    list.map do |tweet|
       TweetRepresenter.new(tweet, user).as_json
     end
   end

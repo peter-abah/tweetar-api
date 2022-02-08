@@ -1,33 +1,28 @@
 # Returns a json representation of user
-class UserRepresenter
+class UserRepresenter < DataRepresenter
   include Rails.application.routes.url_helpers
-  
-  attr_reader :user, :add_token
 
-  def initialize(user)
-    @user = user
-  end
+  attr_reader :add_token
 
-  def as_json(add_token: false)
+  def initialize(data, add_token: false)
+    super(data)
     @add_token = add_token
-    user.as_json.merge(extra_data)
   end
 
   private
 
   def extra_data
-    profile_image_url = user.profile_image.attached? ? rails_blob_path(user.profile_image, disposition: "attachment") : nil
-    cover_image_url = user.cover_image.attached? ? rails_blob_path(user.cover_image, disposition: "attachment") : nil
+    profile_image_url = data.profile_image.attached? ? rails_blob_path(data.profile_image, disposition: "attachment") : nil
+    cover_image_url = data.cover_image.attached? ? rails_blob_path(data.cover_image, disposition: "attachment") : nil
 
-    data = {
+    extra = {
       profile_image: profile_image_url,
       cover_image: cover_image_url
     }
-    data.merge(user_token)
+    extra.merge(user_token)
   end
 
   def user_token
-    add_token ? { token: AuthenticationTokenService.call(user.id) } : {}
+    add_token ? { token: AuthenticationTokenService.call(data.id) } : {}
   end
 end
-
