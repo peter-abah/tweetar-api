@@ -2,14 +2,16 @@ module Api
   module V1
     class UsersController < ApplicationController
       include Paginate
+      include Filterable
 
       before_action :authenticate_request!, only: %i[update destroy]
 
       def index
-        users = paginate(User.all.includes(
+        users = filter(User.all.includes(
           profile_image_attachment: :blob,
           cover_image_attachment: :blob
         ))
+        users = paginate(users)
         render json: UsersRepresenter.new(users).as_json, status: :ok
       end
 

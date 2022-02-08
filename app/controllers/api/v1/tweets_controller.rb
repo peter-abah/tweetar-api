@@ -2,11 +2,14 @@ module Api
   module V1
     class TweetsController < ApplicationController
       include Paginate
+      include Filterable
 
       before_action :authenticate_request!, only: %i[create update destroy]
 
       def index
-        tweets = paginate(Tweet.all.includes(images_attachments: :blob))
+        filtered_tweets = filter(Tweet.all.includes(images_attachments: :blob))
+        tweets = paginate(filtered_tweets)
+
         tweets_json = TweetsRepresenter.new(tweets, @current_user).as_json
         render json: tweets_json, status: :ok
       end

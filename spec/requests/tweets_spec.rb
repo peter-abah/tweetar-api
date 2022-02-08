@@ -37,6 +37,19 @@ RSpec.describe "Tweets", type: :request do
       expect(response).to have_http_status(:ok)
       expect(first_tweet_date).to be >= second_tweet_date
     end
+
+    it 'filters users by name if query is provided' do
+      # create tweet to make sure at least a tweet matches the query
+      FactoryBot.create(:tweet, body: 'Grep test')
+
+      query = 'ep'
+      get '/api/v1/tweets', params: { q: query }
+
+      tweet = JSON.parse(response.body)['list'][0]
+
+      expect(response).to have_http_status(:ok)
+      expect(tweet['body']).to match query
+    end
   end
 
   describe "GET /tweets/:id" do

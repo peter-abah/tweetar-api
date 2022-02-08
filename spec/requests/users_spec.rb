@@ -40,6 +40,19 @@ RSpec.describe 'Users', type: :request do
       expect(response).to have_http_status(:ok)
       expect(JSON.parse(response.body)['list'].size).to eq(5)
     end
+
+    it 'filters users by name if query is provided' do
+      # create user to make sure at least a user matches the query
+      FactoryBot.create(:user, first_name: 'Anna')
+
+      query = 'an'
+      get '/api/v1/users', params: { q: query }
+
+      user = JSON.parse(response.body)['list'][0]
+
+      expect(response).to have_http_status(:ok)
+      expect(user['name']).to match query
+    end
   end
 
   describe 'GET /users/:id' do

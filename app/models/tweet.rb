@@ -27,4 +27,9 @@ class Tweet < ApplicationRecord
   has_many_attached :images
 
   default_scope { order(updated_at: :desc) }
+
+  def self.filter_by_query(query)
+    query = "%#{query.downcase}%"
+    where('body LIKE ?', query)
+  end
 end

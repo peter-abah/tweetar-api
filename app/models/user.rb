@@ -45,4 +45,9 @@ class User < ApplicationRecord
   def name
     "#{first_name} #{last_name}"
   end
+
+  def self.filter_by_query(query)
+    query = "%#{query.downcase}%"
+    where("CONCAT(first_name, ' ', last_name) LIKE ?", query)
+  end
 end
