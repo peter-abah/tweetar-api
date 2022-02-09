@@ -16,6 +16,8 @@
 #
 
 class User < ApplicationRecord
+  include Rails.application.routes.url_helpers
+
   has_secure_password
 
   validates :username, presence: true, uniqueness: true, length: { minimum: 2 }
@@ -38,12 +40,20 @@ class User < ApplicationRecord
   has_many :followed_users, -> { includes(%i[tweets retweets]) }, through: :sent_follows, source: :followed
 
   def as_json(options = {})
-    options = options.merge(except: :password_digest, methods: :name)
+    options = options.merge(except: :password_digest, methods: %i[name profile_image_url cover_image_url])
     super(options)
   end
 
   def name
     "#{first_name} #{last_name}"
+  end
+
+  def profile_image_url
+    profile_image.attached? ? rails_blob_path(profile_image, disposition: "attachment") : nil
+  end
+
+  def cover_image_url
+    cover_image.attached? ? rails_blob_path(cover_image, disposition: "attachment") : nil
   end
 
   def self.filter_by_query(query)
