@@ -41,8 +41,8 @@ class User < ApplicationRecord
   has_one_attached :profile_image, dependent: :destroy
   has_one_attached :cover_image, dependent: :destroy
 
-  has_many :received_follows, foreign_key: :followed_id, class_name: 'Follow', counter_cache: :followers_count
-  has_many :sent_follows, foreign_key: :follower_id, class_name: 'Follow', counter_cache: :followed_users_count
+  has_many :received_follows, foreign_key: :followed_id, class_name: 'Follow'
+  has_many :sent_follows, foreign_key: :follower_id, class_name: 'Follow'
   has_many :followers, -> { includes(
     profile_image_attachment: :blob,
     cover_image_attachment: :blob

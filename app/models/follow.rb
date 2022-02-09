@@ -10,8 +10,8 @@
 #
 
 class Follow < ApplicationRecord
-  belongs_to :followed, class_name: 'User', foreign_key: 'followed_id'
-  belongs_to :follower, class_name: 'User', foreign_key: 'follower_id'
+  belongs_to :followed, class_name: 'User', foreign_key: 'followed_id', counter_cache: :followers_count
+  belongs_to :follower, class_name: 'User', foreign_key: 'follower_id', counter_cache: :followed_users_count
 
   validates :follower_id, presence: true
   validates :followed_id, presence: true
