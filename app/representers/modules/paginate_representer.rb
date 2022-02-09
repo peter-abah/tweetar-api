@@ -1,5 +1,5 @@
 # module for representing paginated list of data
-module PaginateRepresenter
+module Modules::PaginateRepresenter
   # returns data related to pagination
   def paginate_data
     {

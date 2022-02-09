@@ -2,7 +2,7 @@ require_relative './modules/paginate_representer'
 
 # A base class to represent an active record relation with pagination
 class ListRepresenter
-  include PaginateRepresenter
+  include Modules::PaginateRepresenter
 
   attr_reader :list, :options, :extra_data
 

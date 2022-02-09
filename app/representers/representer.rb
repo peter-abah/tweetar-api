@@ -2,7 +2,7 @@ require_relative './modules/representer_finder'
 
 # A wrapper for calling json representers
 class Representer
-  include RepresenterFinder
+  include Modules::RepresenterFinder
 
   attr_reader :data, :options, :extra_data
 

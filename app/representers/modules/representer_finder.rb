@@ -1,5 +1,5 @@
 # Gets the correct json representer for a particular data
-module RepresenterFinder
+module Modules::RepresenterFinder
   REPRESENTERS = {
     'application_record' => DataRepresenter,
     'active_record/relation' => ListRepresenter,
