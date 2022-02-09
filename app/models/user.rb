@@ -39,6 +39,11 @@ class User < ApplicationRecord
   has_many :followers, through: :received_follows, source: :follower
   has_many :followed_users, -> { includes(%i[tweets retweets]) }, through: :sent_follows, source: :followed
 
+  def self.filter_by_query(query)
+    query = "%#{query.downcase}%"
+    where("CONCAT(first_name, ' ', last_name) LIKE ?", query)
+  end
+
   def as_json(options = {})
     options = options.merge(except: :password_digest, methods: %i[name profile_image_url cover_image_url])
     super(options)
@@ -56,8 +61,12 @@ class User < ApplicationRecord
     cover_image.attached? ? rails_blob_path(cover_image, disposition: "attachment") : nil
   end
 
-  def self.filter_by_query(query)
-    query = "%#{query.downcase}%"
-    where("CONCAT(first_name, ' ', last_name) LIKE ?", query)
+  def authentication_token
+    AuthenticationTokenService.call(id)
+  end
+
+  # Returns associations to be added to json
+  def associations_for_json
+    []
   end
 end

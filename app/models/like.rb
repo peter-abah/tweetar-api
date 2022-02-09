@@ -25,4 +25,8 @@ class Like < ApplicationRecord
     }
     super(options).merge(extra_data)
   end
+
+  def associations_for_json
+    %i[user tweet]
+  end
 end

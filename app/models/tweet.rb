@@ -32,4 +32,8 @@ class Tweet < ApplicationRecord
     query = "%#{query.downcase}%"
     where('body LIKE ?', query)
   end
+
+  def associations_for_json
+    %i[user parent]
+  end
 end
