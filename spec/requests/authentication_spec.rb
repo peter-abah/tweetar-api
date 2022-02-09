@@ -16,7 +16,7 @@ RSpec.describe 'Authentications', type: :request do
         'last_name' => user.last_name,
         'bio' => '',
         'email' => 'user@email.com',
-        'token' => AuthenticationTokenService.call(user.id)
+        'authentication_token' => AuthenticationTokenService.call(user.id)
       }
 
       expect(response).to have_http_status(:created)
@@ -34,7 +34,7 @@ RSpec.describe 'Authentications', type: :request do
         'last_name' => user.last_name,
         'bio' => '',
         'email' => 'user@email.com',
-        'token' => AuthenticationTokenService.call(user.id)
+        'authentication_token' => AuthenticationTokenService.call(user.id)
       }
 
       expect(response).to have_http_status(:created)

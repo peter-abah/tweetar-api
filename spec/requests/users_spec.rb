@@ -12,7 +12,7 @@ RSpec.describe 'Users', type: :request do
       expected = {
         'id' => User.last.id,
         'username' => 'user1',
-        'token' => AuthenticationTokenService.call(User.last.id),
+        'authentication_token' => AuthenticationTokenService.call(User.last.id),
         'first_name' => 'first',
         'last_name' => 'last',
         'bio' => '',

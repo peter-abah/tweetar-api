@@ -28,8 +28,15 @@ class User < ApplicationRecord
   validates :email, presence: true, email: true, uniqueness: true
 
   has_many :tweets
-  has_many :retweets
-  has_many :likes
+  has_many :retweets, -> { includes(
+    user: { profile_image_attachment: :blob, cover_image_attachment: :blob },
+    tweet: { images_attachments: :blob }
+  )}
+
+  has_many :likes, -> { includes(
+    user: { profile_image_attachment: :blob, cover_image_attachment: :blob },
+    tweet: { images_attachments: :blob }
+  )}
 
   has_one_attached :profile_image, dependent: :destroy
   has_one_attached :cover_image, dependent: :destroy
@@ -45,7 +52,8 @@ class User < ApplicationRecord
   end
 
   def as_json(options = {})
-    options = options.merge(except: :password_digest, methods: %i[name profile_image_url cover_image_url])
+    methods = %i[name profile_image_url cover_image_url] + (options[:methods] || [])
+    options = options.merge(except: :password_digest, methods: methods)
     super(options)
   end
 

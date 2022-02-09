@@ -47,6 +47,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 5.0.0'
   gem 'bullet'
   gem 'database_cleaner-active_record'
+  gem 'pry-byebug'
 end
 
 group :development do
