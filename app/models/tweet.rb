@@ -33,6 +33,15 @@ class Tweet < ApplicationRecord
     where('body LIKE ?', query)
   end
 
+  def as_json(options = {})
+    options = options.merge(methods: image_urls)
+    super(options)
+  end
+
+  def image_urls
+    images.map { |img| rails_blob_path(img, disposition: "attachment") }
+  end
+
   def associations_for_json
     %i[user parent]
   end
