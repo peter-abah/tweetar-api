@@ -15,6 +15,18 @@ module Api
         render json: Representer.new(users).as_json, status: :ok
       end
 
+      def followers
+        users = filter(user.followers)
+        users = paginate(users)
+        render json: Representer.new(users).as_json, status: :ok
+      end
+
+      def followed_users
+        users = filter(user.followed_users)
+        users = paginate(users)
+        render json: Representer.new(users).as_json, status: :ok
+      end
+
       def create
         user = User.create(user_params)
 

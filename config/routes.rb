@@ -4,7 +4,13 @@ Rails.application.routes.draw do
       post 'login', to: 'authentication#create'
       post 'register', to: 'users#create'
 
-      resources :users, except: %i[edit new]
+      resources :users, except: %i[edit new] do
+        member do
+          get 'followers'
+          get 'followed_users'
+        end
+      end
+      
       resources :tweets, except: %i[edit new]
       resources :retweets, except: %i[edit new update]
       resources :likes, except: %i[edit new update]

@@ -40,4 +40,34 @@ RSpec.describe 'Follows', type: :request do
       expect(updated_user.followed_users).not_to include(followed_user)
     end
   end
+
+  describe 'GET /users/:user_id/followers' do
+    let!(:followed_user) { FactoryBot.create(:user) }
+
+    before { Follow.create!(follower_id: user.id, followed_id: followed_user.id) }
+
+    it 'returns followers of user' do
+      get "/api/v1/users/#{followed_user.id}/followers"
+
+      follower_id = JSON.parse(response.body)['list'][0]['id']
+
+      expect(response).to have_http_status(:ok)
+      expect(follower_id).to eq(user.id)
+    end
+  end
+
+  describe 'GET /users/:user_id/followed_users' do
+    let!(:followed_user) { FactoryBot.create(:user) }
+
+    before { Follow.create!(follower_id: user.id, followed_id: followed_user.id) }
+
+    it 'returns users that user follows' do
+      get "/api/v1/users/#{user.id}/followed_users"
+
+      followed_id = JSON.parse(response.body)['list'][0]['id']
+
+      expect(response).to have_http_status(:ok)
+      expect(followed_id).to eq(followed_user.id)
+    end
+  end
 end

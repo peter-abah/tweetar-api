@@ -43,8 +43,17 @@ class User < ApplicationRecord
 
   has_many :received_follows, foreign_key: :followed_id, class_name: 'Follow', counter_cache: :followers_count
   has_many :sent_follows, foreign_key: :follower_id, class_name: 'Follow', counter_cache: :followed_users_count
-  has_many :followers, through: :received_follows, source: :follower
-  has_many :followed_users, -> { includes(%i[tweets retweets]) }, through: :sent_follows, source: :followed
+  has_many :followers, -> { includes(
+    profile_image_attachment: :blob,
+    cover_image_attachment: :blob
+  ) }, through: :received_follows, source: :follower
+
+  has_many :followed_users, -> { includes(
+    :tweets,
+    :retweets,
+    profile_image_attachment: :blob,
+    cover_image_attachment: :blob
+  ) }, through: :sent_follows, source: :followed
 
   def self.filter_by_query(query)
     query = "%#{query.downcase}%"
