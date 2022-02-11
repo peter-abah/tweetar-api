@@ -46,7 +46,7 @@ class Tweet < ApplicationRecord
   end
 
   def image_urls
-    images.map { |img| rails_blob_path(img, disposition: "attachment") }
+    images.map { |img| rails_blob_url(img, disposition: "attachment") }
   end
 
   def associations_for_json

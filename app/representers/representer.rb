@@ -13,6 +13,6 @@ class Representer
   end
 
   def as_json
-    representer.as_json.merge extra_data
+    representer.as_json.merge
   end
 end

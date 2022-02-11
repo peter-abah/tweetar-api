@@ -71,11 +71,11 @@ class User < ApplicationRecord
   end
 
   def profile_image_url
-    profile_image.attached? ? rails_blob_path(profile_image, disposition: "attachment") : nil
+    profile_image.attached? ? rails_blob_url(profile_image, disposition: "attachment") : nil
   end
 
   def cover_image_url
-    cover_image.attached? ? rails_blob_path(cover_image, disposition: "attachment") : nil
+    cover_image.attached? ? rails_blob_url(cover_image, disposition: "attachment") : nil
   end
 
   def authentication_token

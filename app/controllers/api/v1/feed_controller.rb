@@ -3,9 +3,14 @@ module Api
     class FeedController < ApplicationController
       include Paginate
 
+      before_action :set_current_user
+
       def index
         tweets = paginate generate_tweets
-        render json: Representer.new(tweets).as_json, status: :ok
+
+        options = {}
+        extra_data = { user: @current_user }
+        render json: Representer.new(tweets, options, extra_data).as_json, status: :ok
       end
 
       private
@@ -14,6 +19,10 @@ module Api
         return FeedGenerator.new(current_user!).feed if user_signed_id?
 
         Tweet.all
+      end
+
+      def set_current_user
+        @current_user = user_signed_id? ? current_user! : nil
       end
     end
   end
