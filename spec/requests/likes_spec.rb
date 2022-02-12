@@ -11,7 +11,7 @@ RSpec.describe "Likes", type: :request do
   end
   let(:like) { likes.first }
 
-  describe 'GET /likess' do
+  describe 'GET /likes' do
     context 'when user_id is provided' do
       it 'returns likes for user' do
         get '/api/v1/likes', params: { user_id: user.id }
@@ -55,8 +55,7 @@ RSpec.describe "Likes", type: :request do
 
   describe 'POST /likes' do
     it 'creates a new like' do
-      post '/api/v1/likes', params: { tweet_id: tweet.id },
-                               headers: { 'Authorization': AuthenticationTokenService.call(user2.id) }
+      post "/api/v1/tweets/#{tweet.id}/likes", headers: { 'Authorization': AuthenticationTokenService.call(user2.id) }
 
       updated_tweet = Tweet.find(tweet.id)
       updated_user = User.find(user2.id)
@@ -67,20 +66,19 @@ RSpec.describe "Likes", type: :request do
     end
 
     it 'returns unauthorized if authorization missing' do
-      post '/api/v1/likes', params: { user_id: user.id, tweet_id: tweet.id }
+      post "/api/v1/tweets/#{tweet.id}/likes"
       expect(response).to have_http_status(:unauthorized)
     end
 
     it 'returns unauthorized if authorization is invalid' do
-      post '/api/v1/likes', params: { user_id: user.id, tweet_id: tweet.id },
-                               headers: { 'Authorization': 'awrongtoken123456' }
+      post "/api/v1/tweets/#{tweet.id}/likes", headers: { 'Authorization': 'awrongtoken123456' }
       expect(response).to have_http_status(:unauthorized)
     end
   end
 
   describe 'DELETE /likes/:like_id' do
     it 'deletes a particular tweet' do
-      delete "/api/v1/likes/#{like.id}", headers: { 'Authorization': AuthenticationTokenService.call(user.id) }
+      delete "/api/v1/tweets/#{tweet.id}/likes", headers: { 'Authorization': AuthenticationTokenService.call(user.id) }
 
       updated_user = User.find(user.id)
 
@@ -89,12 +87,12 @@ RSpec.describe "Likes", type: :request do
     end
 
     it 'returns unauthorized if authorization missing' do
-      delete "/api/v1/likes/#{like.id}"
+      delete "/api/v1/tweets/#{tweet.id}/likes"
       expect(response).to have_http_status(:unauthorized)
     end
 
     it 'returns unauthorized if authorization is invalid' do
-      delete "/api/v1/likes/#{like.id}", headers: { 'Authorization': 'awrongtoken123456' }
+      delete "/api/v1/tweets/#{tweet.id}/likes", headers: { 'Authorization': 'awrongtoken123456' }
       expect(response).to have_http_status(:unauthorized)
     end
   end

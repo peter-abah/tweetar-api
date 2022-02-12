@@ -55,8 +55,7 @@ RSpec.describe "Retweets", type: :request do
 
   describe 'POST /retweets' do
     it 'creates a new retweet' do
-      post '/api/v1/retweets', params: { tweet_id: tweet.id },
-                               headers: { 'Authorization': AuthenticationTokenService.call(user2.id) }
+      post "/api/v1/tweets/#{tweet.id}/retweets", headers: { 'Authorization': AuthenticationTokenService.call(user2.id) }
 
       updated_tweet = Tweet.find(tweet.id)
       updated_user = User.find(user2.id)
@@ -67,20 +66,19 @@ RSpec.describe "Retweets", type: :request do
     end
 
     it 'returns unauthorized if authorization missing' do
-      post '/api/v1/retweets', params: { user_id: user.id, tweet_id: tweet.id }
+      post "/api/v1/tweets/#{tweet.id}/retweets"
       expect(response).to have_http_status(:unauthorized)
     end
 
     it 'returns unauthorized if authorization is invalid' do
-      post '/api/v1/retweets', params: { user_id: user.id, tweet_id: tweet.id },
-                               headers: { 'Authorization': 'awrongtoken123456' }
+      post "/api/v1/tweets/#{tweet.id}/retweets", headers: { 'Authorization': 'awrongtoken123456' }
       expect(response).to have_http_status(:unauthorized)
     end
   end
 
   describe 'DELETE /retweets/:retweet_id' do
     it 'deletes a particular tweet' do
-      delete "/api/v1/retweets/#{retweet.id}", headers: { 'Authorization': AuthenticationTokenService.call(user.id) }
+      delete "/api/v1/tweets/#{tweet.id}/retweets", headers: { 'Authorization': AuthenticationTokenService.call(user.id) }
 
       updated_user = User.find(user.id)
 
@@ -89,12 +87,12 @@ RSpec.describe "Retweets", type: :request do
     end
 
     it 'returns unauthorized if authorization missing' do
-      delete "/api/v1/retweets/#{retweet.id}"
+      post "/api/v1/tweets/#{tweet.id}/retweets"
       expect(response).to have_http_status(:unauthorized)
     end
 
     it 'returns unauthorized if authorization is invalid' do
-      delete "/api/v1/retweets/#{retweet.id}", headers: { 'Authorization': 'awrongtoken123456' }
+      post "/api/v1/tweets/#{tweet.id}/retweets", headers: { 'Authorization': 'awrongtoken123456' }
       expect(response).to have_http_status(:unauthorized)
     end
   end

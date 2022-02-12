@@ -31,7 +31,7 @@ module Api
       end
 
       def destroy
-        like = @current_user.likes.find(params[:id])
+        like = @current_user.likes.find_by!(tweet_id: params[:tweet_id])
         like.destroy
         render status: :no_content
       end

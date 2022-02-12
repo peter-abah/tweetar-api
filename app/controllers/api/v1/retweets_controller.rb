@@ -37,7 +37,7 @@ module Api
       end
 
       def destroy
-        retweet = @current_user.retweets.find(params[:id])
+        retweet = @current_user.retweets.find_by!(tweet_id: params[:tweet_id])
         retweet.destroy
         render status: :no_content
       end
