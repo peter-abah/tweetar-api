@@ -8,19 +8,19 @@ module Api
         likes = params[:user_id] ? User.find(params[:user_id]).likes : Tweet.find(params[:tweet_id]).likes
         likes = paginate(likes)
 
-        render json: Representer.new(likes).as_json, status: :ok
+        render json: Representer.new(likes, {}, { user: @current_user }).as_json, status: :ok
       end
 
       def show
         like = Like.find(params[:id])
-        render json: Representer.new(like).as_json, status: :ok
+        render json: Representer.new(like, {}, { user: @current_user }).as_json, status: :ok
       end
 
       def create
         like = @current_user.likes.build(tweet_id: params[:tweet_id])
 
         if like.save
-          render json: Representer.new(like).as_json, status: :ok
+          render json: Representer.new(like, {}, { user: @current_user }).as_json, status: :ok
         else
           render json: { error: like.errors.full_messages }, status: :unprocessable_entity
         end

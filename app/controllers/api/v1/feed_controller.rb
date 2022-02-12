@@ -20,10 +20,6 @@ module Api
 
         Tweet.all
       end
-
-      def set_current_user
-        @current_user = user_signed_in? ? current_user! : nil
-      end
     end
   end
 end

@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::API
   include ExceptionHandler
 
+  before_action :set_current_user
+
   def payload
     auth_header = request.headers['Authorization'];
     token = auth_header.split(' ').last
@@ -26,5 +28,9 @@ class ApplicationController < ActionController::API
 
   def user_signed_in?
     payload && AuthenticationTokenService.valid_payload(payload)
+  end
+
+  def set_current_user
+    @current_user = user_signed_in? ? current_user! : nil
   end
 end
