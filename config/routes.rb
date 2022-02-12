@@ -10,7 +10,7 @@ Rails.application.routes.draw do
           get 'followed_users'
         end
       end
-      
+
       resources :tweets, except: %i[edit new]
       resources :retweets, except: %i[edit new update]
       resources :likes, except: %i[edit new update]

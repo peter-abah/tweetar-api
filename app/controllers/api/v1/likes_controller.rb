@@ -17,6 +17,10 @@ module Api
       end
 
       def create
+        if valid_like?
+          return render json: { error: 'You already liked this tweet' }, status: :unprocessable_entity
+        end
+
         like = @current_user.likes.build(tweet_id: params[:tweet_id])
 
         if like.save
@@ -30,6 +34,10 @@ module Api
         like = @current_user.likes.find(params[:id])
         like.destroy
         render status: :no_content
+      end
+
+      def valid_like?
+        @current_user.likes.exists?(tweet_id: params[:tweet_id])
       end
     end
   end

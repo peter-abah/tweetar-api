@@ -6,7 +6,7 @@ module Api
       before_action :authenticate_request!, only: %i[create destroy]
 
       def index
-        retweets = if params[:user_id] 
+        retweets = if params[:user_id]
                      User.find(params[:user_id]).retweets
                    else
                      Tweet.find(params[:tweet_id]).retweets
@@ -23,6 +23,10 @@ module Api
       end
 
       def create
+        if valid_retweet?
+          return render json: { error: 'You already retweeted this tweet' }, status: :unprocessable_entity
+        end
+
         retweet = @current_user.retweets.build(tweet_id: params[:tweet_id])
 
         if retweet.save
@@ -36,6 +40,12 @@ module Api
         retweet = @current_user.retweets.find(params[:id])
         retweet.destroy
         render status: :no_content
+      end
+
+      private
+
+      def valid_retweet?
+        @current_user.retweets.exists?(tweet_id: params[:tweet_id])
       end
     end
   end
