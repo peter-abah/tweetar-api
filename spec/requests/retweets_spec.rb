@@ -54,7 +54,7 @@ RSpec.describe "Retweets", type: :request do
 
   describe 'POST /retweets' do
     it 'creates a new retweet' do
-      post '/api/v1/retweets', params: { retweet: { user_id: user.id, tweet_id: tweet.id } },
+      post '/api/v1/retweets', params: { tweet_id: tweet.id },
                                headers: { 'Authorization': AuthenticationTokenService.call(user.id) }
 
       updated_tweet = Tweet.find(tweet.id)
