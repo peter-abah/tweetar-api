@@ -3,8 +3,6 @@ module Api
     class FeedController < ApplicationController
       include Paginate
 
-      before_action :set_current_user
-
       def index
         tweets = paginate generate_tweets
 
