@@ -7,7 +7,7 @@ class FeedGenerator
 
   def feed
     tweets = users.reduce([]) do |acc, user|
-      acc.concat(user.tweets, user.retweets)
+      acc.concat(user.tweets, user.retweets, user.likes)
     end
 
     tweets = pad_tweets(tweets) if tweets.count < 25
@@ -15,7 +15,7 @@ class FeedGenerator
   end
 
   def random_tweets(n = 25)
-    Tweet.order('RANDOM()').where.not(user: current_user).take(n)
+    Tweet.order('RANDOM()').take(n)
   end
 
   private
