@@ -16,13 +16,13 @@ module Api
       private
 
       def generate_tweets
-        return FeedGenerator.new(current_user!).feed if user_signed_id?
+        return FeedGenerator.new(current_user!).feed if user_signed_in?
 
         Tweet.all
       end
 
       def set_current_user
-        @current_user = user_signed_id? ? current_user! : nil
+        @current_user = user_signed_in? ? current_user! : nil
       end
     end
   end

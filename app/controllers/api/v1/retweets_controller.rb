@@ -23,7 +23,7 @@ module Api
       end
 
       def create
-        retweet = @current_user.retweets.build(retweet_params)
+        retweet = @current_user.retweets.build(tweet_id: params[:tweet_id])
 
         if retweet.save
           render json: Representer.new(retweet).as_json, status: :ok
@@ -36,12 +36,6 @@ module Api
         retweet = @current_user.retweets.find(params[:id])
         retweet.destroy
         render status: :no_content
-      end
-
-      private
-
-      def retweet_params
-        params.require(:retweet).permit(:tweet_id, :user_id)
       end
     end
   end

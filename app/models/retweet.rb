@@ -20,8 +20,7 @@ class Retweet < ApplicationRecord
 
   def as_json(options = {})
     extra_data = {
-      tweet: tweet.as_json,
-      user: user.as_json
+      is_retweet: true
     }
     super(options).merge(extra_data)
   end
