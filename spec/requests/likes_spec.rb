@@ -3,6 +3,7 @@ require 'date'
 
 RSpec.describe "Likes", type: :request do
   let!(:user) { FactoryBot.create(:user) }
+  let!(:user2) { FactoryBot.create(:user) }
   let!(:tweets) { FactoryBot.create_list(:tweet, 5, user: user) }
   let(:tweet) { tweets.first }
   let!(:likes) do
@@ -55,14 +56,14 @@ RSpec.describe "Likes", type: :request do
   describe 'POST /likes' do
     it 'creates a new like' do
       post '/api/v1/likes', params: { tweet_id: tweet.id },
-                               headers: { 'Authorization': AuthenticationTokenService.call(user.id) }
+                               headers: { 'Authorization': AuthenticationTokenService.call(user2.id) }
 
       updated_tweet = Tweet.find(tweet.id)
-      updated_user = User.find(user.id)
+      updated_user = User.find(user2.id)
 
       expect(response).to have_http_status(:ok)
       expect(updated_tweet.likes.size).to eq(2)
-      expect(updated_user.likes.size).to eq(6)
+      expect(updated_user.likes.size).to eq(1)
     end
 
     it 'returns unauthorized if authorization missing' do
