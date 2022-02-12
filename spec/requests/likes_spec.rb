@@ -54,7 +54,7 @@ RSpec.describe "Likes", type: :request do
 
   describe 'POST /likes' do
     it 'creates a new like' do
-      post '/api/v1/likes', params: { like: { user_id: user.id, tweet_id: tweet.id } },
+      post '/api/v1/likes', params: { tweet_id: tweet.id },
                                headers: { 'Authorization': AuthenticationTokenService.call(user.id) }
 
       updated_tweet = Tweet.find(tweet.id)

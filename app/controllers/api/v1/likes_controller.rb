@@ -17,7 +17,7 @@ module Api
       end
 
       def create
-        like = @current_user.likes.build(like_params)
+        like = @current_user.likes.build(tweet_id: params[:tweet_id])
 
         if like.save
           render json: Representer.new(like).as_json, status: :ok
@@ -30,12 +30,6 @@ module Api
         like = @current_user.likes.find(params[:id])
         like.destroy
         render status: :no_content
-      end
-
-      private
-
-      def like_params
-        params.require(:like).permit(:tweet_id, :user_id)
       end
     end
   end
