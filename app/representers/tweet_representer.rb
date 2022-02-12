@@ -3,7 +3,7 @@ class TweetRepresenter < DataRepresenter
   attr_reader :user
 
   def initialize(model, options, extra_data)
-    super(model, options)
+    super(model, options, extra_data)
     @user = extra_data[:user]
   end
 

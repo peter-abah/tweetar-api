@@ -2,9 +2,10 @@
 class DataRepresenter
   attr_reader :model, :options
 
-  def initialize(model, options, extra_data = {})
+  def initialize(model, options, extra_data)
     @model = model
     @options = options
+    @user = extra_data[:user]
   end
 
   def as_json
@@ -14,7 +15,7 @@ class DataRepresenter
   def extra_data
     model.associations_for_json.reduce({}) do |result, method|
       association = model.send(method)
-      result[method] = Representer.new(association).as_json if association
+      result[method] = Representer.new(association, options, { user: @user }).as_json if association
       result
     end
   end
