@@ -24,7 +24,7 @@ module Api
         like = @current_user.likes.build(tweet_id: params[:tweet_id])
 
         if like.save
-          render json: Representer.new(like, {}, { user: @current_user }).as_json, status: :ok
+          render json: Representer.new(like.tweet, {}, { user: @current_user }).as_json, status: :ok
         else
           render json: { error: like.errors.full_messages }, status: :unprocessable_entity
         end

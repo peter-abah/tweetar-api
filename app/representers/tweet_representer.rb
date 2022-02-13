@@ -11,7 +11,8 @@ class TweetRepresenter < DataRepresenter
     {
       id: model.id,
       tweet: model.as_json(options).merge(extra_data),
-      type: model.type
+      type: model.type,
+      data_id: "#{model.type}-#{model.id}"
     }
   end
 

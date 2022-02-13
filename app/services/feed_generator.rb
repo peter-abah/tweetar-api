@@ -10,8 +10,7 @@ class FeedGenerator
       acc.concat(user.tweets, user.retweets, user.likes)
     end
 
-    tweets = pad_tweets(tweets) if tweets.count < 25
-    Kaminari.paginate_array(tweets)
+    tweets.count < 25 ? pad_tweets(tweets) : tweets
   end
 
   def random_tweets(n = 25)

@@ -30,7 +30,7 @@ module Api
         retweet = @current_user.retweets.build(tweet_id: params[:tweet_id])
 
         if retweet.save
-          render json: Representer.new(retweet, {}, { user: @current_user }).as_json, status: :ok
+          render json: Representer.new(retweet.tweet, {}, { user: @current_user }).as_json, status: :ok
         else
           render json: { error: retweet.errors.full_messages }, status: :unprocessable_entity
         end

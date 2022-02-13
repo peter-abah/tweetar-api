@@ -13,7 +13,8 @@ class TweetActionRepresenter < TweetRepresenter
       id: tweet_action.id,
       tweet: model.as_json(options).merge(extra_data),
       user: Representer.new(tweet_action.user, options, { user: user }).as_json,
-      type: tweet_action.type
+      type: tweet_action.type,
+      data_id: "#{tweet_action.type}-#{tweet_action.id}"
     }
   end
 end
