@@ -2,9 +2,10 @@ module Api
   module V1
     class FeedController < ApplicationController
       include Paginate
+      include Orderable
 
       def index
-        tweets = paginate generate_tweets
+        tweets = paginate order(generate_tweets)
 
         options = {}
         extra_data = { user: @current_user }
