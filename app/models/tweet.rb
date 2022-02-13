@@ -41,7 +41,7 @@ class Tweet < ApplicationRecord
   end
 
   def as_json(options = {})
-    options = options.merge(methods: :image_urls)
+    options = options.merge(methods: %i[image_urls type])
     super(options)
   end
 
@@ -51,5 +51,9 @@ class Tweet < ApplicationRecord
 
   def associations_for_json
     %i[user parent]
+  end
+
+  def type
+    'tweet'
   end
 end
