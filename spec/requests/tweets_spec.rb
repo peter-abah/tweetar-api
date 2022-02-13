@@ -31,8 +31,8 @@ RSpec.describe "Tweets", type: :request do
       get '/api/v1/tweets'
 
       list_json = JSON.parse(response.body)['list']
-      first_tweet_date = DateTime.parse(list_json[0]['updated_at'])
-      second_tweet_date = DateTime.parse(list_json[1]['updated_at'])
+      first_tweet_date = DateTime.parse(list_json[0]['tweet']['updated_at'])
+      second_tweet_date = DateTime.parse(list_json[1]['tweet']['updated_at'])
 
       expect(response).to have_http_status(:ok)
       expect(first_tweet_date).to be >= second_tweet_date
@@ -48,7 +48,7 @@ RSpec.describe "Tweets", type: :request do
       tweet = JSON.parse(response.body)['list'][0]
 
       expect(response).to have_http_status(:ok)
-      expect(tweet['body']).to match query
+      expect(tweet['tweet']['body']).to match query
     end
   end
 
@@ -85,7 +85,7 @@ RSpec.describe "Tweets", type: :request do
       new_tweet = Tweet.find(json['id'])
 
       expect(response).to have_http_status(:created)
-      expect(json['body']).to eql('A tweet')
+      expect(json['tweet']['body']).to eql('A tweet')
       expect(new_tweet.body).to eql('A tweet') # checks tweet is created
       expect(new_tweet.user).to eql(user)
     end
@@ -137,7 +137,7 @@ RSpec.describe "Tweets", type: :request do
       updated_tweet = Tweet.find(tweet.id)
 
       expect(response).to have_http_status(:ok)
-      expect(json['body']).to eq('update')
+      expect(json['tweet']['body']).to eq('update')
       expect(updated_tweet.body).to eq('update')
     end
   end

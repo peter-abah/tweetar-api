@@ -41,7 +41,7 @@ class Tweet < ApplicationRecord
   end
 
   def as_json(options = {})
-    options = options.merge(methods: %i[image_urls type])
+    options = options.merge(methods: :image_urls)
     super(options)
   end
 

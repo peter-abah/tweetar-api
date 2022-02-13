@@ -18,16 +18,9 @@ class Like < ApplicationRecord
 
   default_scope { order(updated_at: :desc) }
 
-  def as_json(options = {})
-    options = options.merge(methods: :type)
-    super(options)
-  end
-
   def associations_for_json
     %i[user tweet]
   end
-
-  private
 
   def type
     'like'

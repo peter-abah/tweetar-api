@@ -24,8 +24,8 @@ RSpec.describe "Likes", type: :request do
         get '/api/v1/likes', params: { user_id: user.id }
 
         list_json = JSON.parse(response.body)['list']
-        first_like_date = DateTime.parse(list_json[0]['updated_at'])
-        second_like_date = DateTime.parse(list_json[1]['updated_at'])
+        first_like_date = DateTime.parse(list_json[0]['tweet']['updated_at'])
+        second_like_date = DateTime.parse(list_json[1]['tweet']['updated_at'])
 
         expect(response).to have_http_status(:ok)
         expect(first_like_date).to be >= second_like_date

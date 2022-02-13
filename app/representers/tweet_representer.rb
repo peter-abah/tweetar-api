@@ -7,6 +7,14 @@ class TweetRepresenter < DataRepresenter
     @user = extra_data[:user]
   end
 
+  def as_json
+    {
+      id: model.id,
+      tweet: model.as_json(options).merge(extra_data),
+      type: model.type
+    }
+  end
+
   private
 
   def extra_data

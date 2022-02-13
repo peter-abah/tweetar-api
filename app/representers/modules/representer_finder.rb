@@ -5,7 +5,9 @@ module Modules::RepresenterFinder
     'active_record/relation' => ListRepresenter,
     'active_record/association_relation' => ListRepresenter,
     'array' => ListRepresenter,
-    'tweet' => TweetRepresenter
+    'tweet' => TweetRepresenter,
+    'like' => TweetActionRepresenter,
+    'retweet' => TweetActionRepresenter
   }
 
   def representer
