@@ -56,7 +56,7 @@ RSpec.describe 'Users', type: :request do
   end
 
   describe 'GET /users/:id' do
-    let(:user) { FactoryBot.create(:user, username: 'auser') }
+    let!(:user) { FactoryBot.create(:user, username: 'auser') }
 
     it 'returns the correct user' do
       get "/api/v1/users/#{user.id}"
@@ -65,6 +65,19 @@ RSpec.describe 'Users', type: :request do
 
       expect(response).to have_http_status(:ok)
       expect(json['username']).to eq('auser')
+    end
+  end
+
+  describe "GET /users/:username" do
+    let!(:user) { FactoryBot.create(:user, username: 'user') }
+
+    it 'returns the correct user' do
+      get "/api/v1/users/user"
+
+      json = JSON.parse(response.body)
+
+      expect(response).to have_http_status(:ok)
+      expect(json['id']).to eq(user.id)
     end
   end
 

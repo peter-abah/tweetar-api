@@ -67,7 +67,8 @@ module Api
       private
 
       def user
-        User.includes(%i[profile_image_attachment cover_image_attachment]).find(params[:id])
+        User.includes(%i[profile_image_attachment cover_image_attachment]).find_by(username: params[:id]) ||
+          User.includes(%i[profile_image_attachment cover_image_attachment]).find(params[:id])
       end
 
       def user_json(user, options = {methods: [:authentication_token]})
