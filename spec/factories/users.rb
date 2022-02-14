@@ -13,6 +13,7 @@
 #  email                :string
 #  followers_count      :integer          default("0")
 #  followed_users_count :integer          default("0")
+#  tweets_count         :integer          default("0")
 #
 
 FactoryBot.define do

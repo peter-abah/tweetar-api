@@ -18,7 +18,7 @@ class Tweet < ApplicationRecord
 
   validates :body, presence: true, length: { in: 2..250 }
 
-  belongs_to :user
+  belongs_to :user, counter_cache: true
   belongs_to :parent, class_name: 'Tweet', optional: true, counter_cache: :replies_count
   has_many :replies, foreign_key: 'parent_id', class_name: 'Tweet'
   has_many :retweets, -> { includes(

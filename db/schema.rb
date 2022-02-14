@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_08_005040) do
+ActiveRecord::Schema.define(version: 2022_02_14_165345) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(version: 2022_02_08_005040) do
     t.string "email"
     t.integer "followers_count", default: 0
     t.integer "followed_users_count", default: 0
+    t.integer "tweets_count", default: 0
     t.index ["email"], name: "index_users_on_email"
     t.index ["username"], name: "index_users_on_username"
   end
