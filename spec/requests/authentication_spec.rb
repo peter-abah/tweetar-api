@@ -19,6 +19,8 @@ RSpec.describe 'Authentications', type: :request do
         'authentication_token' => AuthenticationTokenService.call(user.id)
       }
 
+      binding.pry unless compare_hash(expected, json)
+  
       expect(response).to have_http_status(:created)
       expect(compare_hash(expected, json)).to be true
     end

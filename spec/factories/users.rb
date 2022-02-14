@@ -17,7 +17,7 @@
 
 FactoryBot.define do
   factory :user do
-    username { Faker::Internet.unique.username(specifier: 5..10) }
+    username { Faker::Internet.unique.username(specifier: 5..10, separators: '_') }
     password { 'password' }
     password_confirmation { 'password' }
     first_name { Faker::Name.first_name }

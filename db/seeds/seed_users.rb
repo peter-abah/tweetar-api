@@ -6,7 +6,7 @@ def seed_users(n = 20)
     cover_img = File.open("#{Rails.root}/app/assets/images/1.jpg")
 
     user = User.create!({
-      username: Faker::Internet.unique.username,
+      username: Faker::Internet.unique.username(separators: '_'),
       email: Faker::Internet.unique.email,
       first_name: Faker::Name.first_name,
       last_name: Faker::Name.last_name,

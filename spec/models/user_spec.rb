@@ -43,6 +43,28 @@ RSpec.describe User, type: :model do
     it { should validate_length_of(:password).is_at_least(8) }
 
     it { should validate_presence_of(:email) }
+
+    context 'should validate correct usernames' do
+      it 'validates a correct username (with only letters, numbers and underscores' do
+        user = FactoryBot.build(:user, username: 'a_correct__username1_2_3')
+        expect(user).to be_valid
+      end
+
+      it 'does not allow usernames with periods' do
+        user = FactoryBot.build(:user, username: 'incorrect.username')
+        expect(user).not_to be_valid
+      end
+
+      it 'does not allow usernames with spaces' do
+        user = FactoryBot.build(:user, username: 'incorrect username')
+        expect(user).not_to be_valid
+      end
+
+      it 'does not allow usernames with special characters' do
+        user = FactoryBot.build(:user, username: 'incorrect,:;@#$%username')
+        expect(user).not_to be_valid
+      end
+    end
   end
 
   describe '#name' do
