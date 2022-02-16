@@ -5,6 +5,6 @@ def seed_likes
 end
 
 def seed_likes_for(user)
-  tweets = Tweet.select(:id).order('RANDOM()').take(20)
+  tweets = Tweet.where(id: Tweet.pluck(:id).sample(rand(21)))
   tweets.each { |tweet| Like.create!(tweet_id: tweet.id, user_id: user.id) }
 end

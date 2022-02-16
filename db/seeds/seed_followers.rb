@@ -5,7 +5,8 @@ def seed_followers
 end
 
 def seed_followers_for(user)
-  users_to_follow = User.order('RANDOM()').where.not(id: user.id).take(rand(21))
+  users_to_follow = User.where(id: User.pluck(:id).sample(rand(21))).where.not(id: user.id)
+
   users_to_follow.each do |user_to_follow|
     Follow.create!(follower_id: user.id, followed_id: user_to_follow.id)
   end
