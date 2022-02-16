@@ -17,7 +17,7 @@ module Api
         follow = Follow.new(follower_id: @current_user.id, followed_id: user.id)
 
         if follow.save
-          render status: :no_content
+          render json: Representer.new(user, {}, { user: @current_user }).as_json, status: :ok
         else
           render json: { error: follow.errors.full_messages }, status: :unprocessable_entity
         end
@@ -32,7 +32,7 @@ module Api
         end
 
         follow.destroy
-        render status: :no_content
+        render json: Representer.new(user, {}, { user: @current_user }).as_json, status: :ok
       end
 
       private

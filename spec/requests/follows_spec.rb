@@ -12,7 +12,7 @@ RSpec.describe 'Follows', type: :request do
       updated_user = User.find(user.id)
       updated_followed_user = User.find(followed_user.id)
 
-      expect(response).to have_http_status(:no_content)
+      expect(response).to have_http_status(:ok)
       expect(updated_user.followed_users).to include(followed_user)
       expect(updated_followed_user.followers).to include(user)
     end
@@ -34,7 +34,7 @@ RSpec.describe 'Follows', type: :request do
       delete "/api/v1/users/#{followed_user.id}/follow", headers: { 'Authorization': AuthenticationTokenService.call(user.id) }
 
       updated_user = User.find(user.id)
-      expect(response).to have_http_status(:no_content)
+      expect(response).to have_http_status(:ok)
       expect(updated_user.followed_users).not_to include(followed_user)
     end
   end
