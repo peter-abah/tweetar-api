@@ -96,7 +96,7 @@ RSpec.describe "Tweets", type: :request do
         fixture_file_upload("2.jpg", "image/jpeg")
       ]
 
-      post '/api/v1/tweets/', params: { tweet: { body: 'A tweet', images: images } }, 
+      post '/api/v1/tweets/', params: { tweet: { body: 'A tweet', images: images } },
                            headers: { 'Authorization' => AuthenticationTokenService.call(user.id) }
 
       json = JSON.parse(response.body)
@@ -105,6 +105,24 @@ RSpec.describe "Tweets", type: :request do
       expect(response).to have_http_status(:created)
       expect(new_tweet.images).to be_attached
       expect(new_tweet.images.size).to be 2
+    end
+
+    context 'replying a tweet' do
+      let!(:tweet) { FactoryBot.create(:tweet) }
+
+      it 'creates a tweet replying to specified tweet' do
+        post '/api/v1/tweets/', params: { tweet: { body: 'A tweet', parent_id: tweet.id } }, 
+                                headers: { 'Authorization' => AuthenticationTokenService.call(user.id) }
+
+        json = JSON.parse(response.body)
+        parent_id = json['tweet']['parent']['id']
+        reply_id = json['id']
+        new_tweet = tweet.replies.find(reply_id)
+
+        expect(response).to have_http_status(:created)
+        expect(parent_id).to eq(tweet.id)
+        expect(reply_id).to eq(new_tweet.id)
+      end
     end
   end
 
