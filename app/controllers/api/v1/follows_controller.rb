@@ -38,7 +38,7 @@ module Api
       private
 
       def user
-        User.find(params[:user_id])
+        User.find(params[:id])
       end
     end
   end

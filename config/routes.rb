@@ -8,6 +8,8 @@ Rails.application.routes.draw do
         member do
           get 'followers'
           get 'followed_users'
+          post 'follow', to: 'follows#create'
+          delete 'follow', to: 'follows#destroy'
         end
       end
 
@@ -16,15 +18,11 @@ Rails.application.routes.draw do
       resources :tweets, except: %i[edit new] do
         resource :retweets, only: %i[create destroy]
         resource :likes, only: %i[create destroy]
+        get 'replies', to: 'tweets#replies', member: true
       end
 
       resources :retweets, only: %i[index show]
       resources :likes, only: %i[index show]
-
-      get 'tweets/:id/replies', to: 'tweets#replies'
-
-      post 'follow', to: 'follows#create'
-      delete 'follow', to: 'follows#destroy'
     end
   end
 end

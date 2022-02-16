@@ -44,11 +44,16 @@ module Api
       end
 
       def replies
+        tweet = Tweet.includes(images_attachments: :blob).find(params[:tweet_id])
         replies = paginate(tweet.replies)
         render json: json(replies), status: :ok
       end
 
       private
+
+      def tweet
+        Tweet.includes(images_attachments: :blob).find(params[:id])
+      end
 
       def json(data)
         Representer.new(data, options, extra_data).as_json
@@ -62,12 +67,8 @@ module Api
         { user: @current_user }
       end
 
-      def tweet
-        Tweet.includes(images_attachments: :blob).find(params[:id])
-      end
-
       def tweet_params
-        params.require(:tweet).permit(:body, :parent_id, images: [],)
+        params.require(:tweet).permit(:body, :parent_id, images: [])
       end
     end
   end
