@@ -12,19 +12,19 @@ module Api
           cover_image_attachment: :blob
         ))
         users = paginate(users)
-        render json: Representer.new(users).as_json, status: :ok
+        render json: Representer.new(users, {}, { user: @current_user }).as_json, status: :ok
       end
 
       def followers
         users = filter(user.followers)
         users = paginate(users)
-        render json: Representer.new(users).as_json, status: :ok
+        render json: Representer.new(users, {}, { user: @current_user }).as_json, status: :ok
       end
 
       def followed_users
         users = filter(user.followed_users)
         users = paginate(users)
-        render json: Representer.new(users).as_json, status: :ok
+        render json: Representer.new(users, {}, { user: @current_user }).as_json, status: :ok
       end
 
       def create
@@ -38,7 +38,7 @@ module Api
       end
 
       def show
-        render json: Representer.new(user).as_json, status: :ok
+        render json: Representer.new(user, {}, { user: @current_user }).as_json, status: :ok
       end
 
       def update
@@ -71,8 +71,8 @@ module Api
           User.includes(%i[profile_image_attachment cover_image_attachment]).find(params[:id])
       end
 
-      def user_json(user, options = {methods: [:authentication_token]})
-        Representer.new(user, options).as_json
+      def user_json(user, options = { methods: [:authentication_token] })
+        Representer.new(user, options, { user: @current_user }).as_json
       end
 
       def user_params

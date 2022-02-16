@@ -1,6 +1,6 @@
 # A base class to represent a model as json
 class DataRepresenter
-  attr_reader :model, :options
+  attr_reader :model, :options, :user
 
   def initialize(model, options, extra_data)
     @model = model
@@ -15,7 +15,7 @@ class DataRepresenter
   def extra_data
     model.associations_for_json.reduce({}) do |result, method|
       association = model.send(method)
-      result[method] = Representer.new(association, options, { user: @user }).as_json if association
+      result[method] = Representer.new(association, options, { user: user }).as_json if association
       result
     end
   end

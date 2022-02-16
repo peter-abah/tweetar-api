@@ -7,7 +7,8 @@ module Modules::RepresenterFinder
     'array' => ListRepresenter,
     'tweet' => TweetRepresenter,
     'like' => TweetActionRepresenter,
-    'retweet' => TweetActionRepresenter
+    'retweet' => TweetActionRepresenter,
+    'user' => UserRepresenter
   }
 
   def representer
