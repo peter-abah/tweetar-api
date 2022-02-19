@@ -1,8 +1,8 @@
 json.list do
   json.array! @tweets do |tweet|
-    json.cache! ['v1', tweet], expires_in: 10.minutes do
+    # json.cache! ['v1', tweet], expires_in: 1.minutes do
       json.partial! 'api/v1/tweets/tweet', locals: { tweet: tweet, options: { add_parent: true } }
-    end
+    # end
   end
 end
 

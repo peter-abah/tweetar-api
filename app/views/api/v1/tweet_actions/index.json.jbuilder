@@ -1,8 +1,8 @@
 json.list do
   json.array! @tweet_actions do |tweet_action|
-    json.cache! ['v1', tweet_action], expires_in: 10.minutes do
+    # json.cache! ['v1', tweet_action], expires_in: 1.minutes do
       json.partial! 'api/v1/tweet_actions/tweet_action', locals: { tweet_action: tweet_action }
-    end
+    # end
   end
 end
 

@@ -1,8 +1,8 @@
 json.list do
   json.array! @users do |user|
-    json.cache! ['v1', user], expires_in: 10.minutes do
+    # json.cache! ['v1', user], expires_in: 1.minutes do
       json.partial! 'api/v1/users/user', locals: { user: user }
-    end
+    # end
   end
 end
 
