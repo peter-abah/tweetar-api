@@ -14,14 +14,14 @@ RSpec.describe "Likes", type: :request do
   describe 'GET /likes' do
     context 'when user_id is provided' do
       it 'returns likes for user' do
-        get '/api/v1/likes', params: { user_id: user.id }
+        get "/api/v1/users/#{user.id}/likes"
 
         expect(response).to have_http_status(:ok)
         expect(JSON.parse(response.body)['list'].size).to eq(5)
       end
 
       it 'returns a sorted response (sorted by date descending)' do
-        get '/api/v1/likes', params: { user_id: user.id }
+        get "/api/v1/users/#{user.id}/likes"
 
         list_json = JSON.parse(response.body)['list']
         first_like_date = DateTime.parse(list_json[0]['tweet']['updated_at'])
@@ -34,7 +34,7 @@ RSpec.describe "Likes", type: :request do
 
     context 'when tweet_id is provided' do
       it 'returns likes for tweet' do
-        get '/api/v1/likes', params: { tweet_id: tweet.id }
+        get "/api/v1/tweets/#{tweet.id}/likes"
 
         expect(response).to have_http_status(:ok)
         expect(JSON.parse(response.body)['list'].size).to eq(1)
