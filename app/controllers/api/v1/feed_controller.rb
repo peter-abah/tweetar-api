@@ -5,11 +5,7 @@ module Api
       include Orderable
 
       def index
-        tweets = paginate order(generate_tweets)
-
-        options = {}
-        extra_data = { user: @current_user }
-        render json: Representer.new(tweets, options, extra_data).as_json, status: :ok
+        @feed = paginate order(generate_tweets)
       end
 
       private

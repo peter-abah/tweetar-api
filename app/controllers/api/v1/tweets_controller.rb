@@ -7,46 +7,49 @@ module Api
       before_action :authenticate_request!, only: %i[create update destroy]
 
       def index
-        filtered_tweets = filter(Tweet.all.includes(images_attachments: :blob))
-        tweets = paginate(filtered_tweets)
-
-        render json: json(tweets), status: :ok
+        filtered_tweets = filter(Tweet.all.includes(
+          **tweet_includes_options,
+          parent: { **tweet_includes_options }
+        ))
+        @tweets = paginate(filtered_tweets)
       end
 
       def create
-        tweet = @current_user.tweets.build(tweet_params)
+        @tweet = @current_user.tweets.build(tweet_params)
 
-        if tweet.save
-          render json: json(tweet), status: :created
+        if @tweet.save
+          render 'api/v1/tweets/show', status: :created
         else
-          render json: { error: user.errors.full_messages.first }, status: :unprocessable_entity
+          render json: { error: @tweet.errors.full_messages.first }, status: :unprocessable_entity
         end
       end
 
       def show
-        render json: json(tweet), status: :ok
+        @tweet = tweet
       end
 
       def update
-        tweet = @current_user.tweets.find(params[:id])
+        @tweet = @current_user.tweets.find(params[:id])
 
-        if tweet.update(tweet_params)
-          render json: json(tweet), status: :ok
+        if @tweet.update(tweet_params)
+          render 'api/v1/tweets/show'
         else
-          render json: { error: user.errors.full_messages.first }, status: :unprocessable_entity
+          render json: { error: @tweet.errors.full_messages.first }, status: :unprocessable_entity
         end
       end
 
       def destroy
         tweet = @current_user.tweets.find(params[:id])
         tweet.destroy
-        render status: :no_content
+
+        # rendering empty json instead of no content because jbuilder has a bug with rendering no content
+        render json: {}, status: :no_content
       end
 
       def replies
-        tweet = Tweet.includes(images_attachments: :blob).find(params[:tweet_id])
-        replies = paginate(tweet.replies)
-        render json: json(replies), status: :ok
+        tweet = Tweet.find(params[:tweet_id])
+        @tweets = paginate(tweet.replies)
+        render 'api/v1/tweets/index'
       end
 
       private
@@ -55,16 +58,14 @@ module Api
         Tweet.includes(images_attachments: :blob).find(params[:id])
       end
 
-      def json(data)
-        Representer.new(data, options, extra_data).as_json
-      end
-
-      def options
-        {}
-      end
-
-      def extra_data
-        { user: @current_user }
+      def tweet_includes_options
+        {
+          user: {
+            profile_image_attachment: :blob,
+            cover_image_attachment: :blob
+          },
+          images_attachments: :blob
+        }
       end
 
       def tweet_params

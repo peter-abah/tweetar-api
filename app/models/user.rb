@@ -29,32 +29,40 @@ class User < ApplicationRecord
   validates :email, presence: true, email: true, uniqueness: true
 
   has_many :tweets
-  has_many :retweets, -> { includes(
-    user: { profile_image_attachment: :blob, cover_image_attachment: :blob },
-    tweet: { images_attachments: :blob }
-  )}
+  has_many :retweets, lambda {
+                        includes(
+                          user: { profile_image_attachment: :blob, cover_image_attachment: :blob },
+                          tweet: { images_attachments: :blob }
+                        )
+                      }
 
-  has_many :likes, -> { includes(
-    user: { profile_image_attachment: :blob, cover_image_attachment: :blob },
-    tweet: { images_attachments: :blob }
-  )}
+  has_many :likes, lambda {
+                     includes(
+                       user: { profile_image_attachment: :blob, cover_image_attachment: :blob },
+                       tweet: { images_attachments: :blob }
+                     )
+                   }
 
   has_one_attached :profile_image, dependent: :destroy
   has_one_attached :cover_image, dependent: :destroy
 
   has_many :received_follows, foreign_key: :followed_id, class_name: 'Follow'
   has_many :sent_follows, foreign_key: :follower_id, class_name: 'Follow'
-  has_many :followers, -> { includes(
-    profile_image_attachment: :blob,
-    cover_image_attachment: :blob
-  ) }, through: :received_follows, source: :follower
+  has_many :followers, lambda {
+                         includes(
+                           profile_image_attachment: :blob,
+                           cover_image_attachment: :blob
+                         )
+                       }, through: :received_follows, source: :follower
 
-  has_many :followed_users, -> { includes(
-    :tweets,
-    :retweets,
-    profile_image_attachment: :blob,
-    cover_image_attachment: :blob
-  ) }, through: :sent_follows, source: :followed
+  has_many :followed_users, lambda {
+                              includes(
+                                :tweets,
+                                :retweets,
+                                profile_image_attachment: :blob,
+                                cover_image_attachment: :blob
+                              )
+                            }, through: :sent_follows, source: :followed
 
   def self.filter_by_query(query)
     query = "%#{query.downcase}%"
@@ -72,11 +80,19 @@ class User < ApplicationRecord
   end
 
   def profile_image_url
-    profile_image.attached? ? rails_blob_url(profile_image, disposition: "attachment") : nil
+    profile_image.attached? ? rails_blob_url(profile_image, disposition: 'attachment') : nil
   end
 
   def cover_image_url
-    cover_image.attached? ? rails_blob_url(cover_image, disposition: "attachment") : nil
+    cover_image.attached? ? rails_blob_url(cover_image, disposition: 'attachment') : nil
+  end
+
+  def followed_by_user?(user)
+    received_follows.exists?(follower: user)
+  end
+
+  def following_user?(user)
+    sent_follows.exists?(followed: user)
   end
 
   def authentication_token

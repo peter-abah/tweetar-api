@@ -49,8 +49,12 @@ class Tweet < ApplicationRecord
     images.map { |img| rails_blob_url(img, disposition: "attachment") }
   end
 
-  def associations_for_json
-    %i[user parent]
+  def liked_by_user?(user)
+    likes.exists?(user: user)
+  end
+
+  def retweeted_by_user?(user)
+    retweets.exists?(user: user)
   end
 
   def type

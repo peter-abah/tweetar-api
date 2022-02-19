@@ -5,7 +5,7 @@ module Api
 
       def create
         if user == @current_user
-          render json: { error: 'You can not follow yourself' }, status: :forbidden
+          render json: { error: 'You cannot follow yourself' }, status: :forbidden
           return
         end
 
@@ -16,8 +16,9 @@ module Api
 
         follow = Follow.new(follower_id: @current_user.id, followed_id: user.id)
 
+        @user = follow.followed
         if follow.save
-          render json: Representer.new(user, {}, { user: @current_user }).as_json, status: :ok
+          render 'api/v1/users/show'
         else
           render json: { error: follow.errors.full_messages }, status: :unprocessable_entity
         end
@@ -31,8 +32,9 @@ module Api
           return
         end
 
+        @user = follow.followed
         follow.destroy
-        render json: Representer.new(user, {}, { user: @current_user }).as_json, status: :ok
+        render 'api/v1/users/show'
       end
 
       private

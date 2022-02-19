@@ -6,14 +6,13 @@ module Api
 
       def index
         likes = params[:user_id] ? User.find(params[:user_id]).likes : Tweet.find(params[:tweet_id]).likes
-        likes = paginate(likes)
-
-        render json: Representer.new(likes, {}, { user: @current_user }).as_json, status: :ok
+        @tweet_actions = paginate(likes)
+        render 'api/v1/tweet_actions/index'
       end
 
       def show
-        like = Like.find(params[:id])
-        render json: Representer.new(like, {}, { user: @current_user }).as_json, status: :ok
+        @tweet_action = Like.find(params[:id])
+        render 'api/v1/tweet_actions/show'
       end
 
       def create
@@ -21,10 +20,10 @@ module Api
           return render json: { error: 'You already liked this tweet' }, status: :unprocessable_entity
         end
 
-        like = @current_user.likes.build(tweet_id: params[:tweet_id])
+        @tweet_action = @current_user.likes.build(tweet_id: params[:tweet_id])
 
-        if like.save
-          render json: Representer.new(like.tweet, {}, { user: @current_user }).as_json, status: :ok
+        if @tweet_action.save
+          render 'api/v1/tweet_actions/show'
         else
           render json: { error: like.errors.full_messages }, status: :unprocessable_entity
         end
@@ -33,7 +32,9 @@ module Api
       def destroy
         like = @current_user.likes.find_by!(tweet_id: params[:tweet_id])
         like.destroy
-        render status: :no_content
+
+        # rendering empty json instead of no content because jbuilder has a bug with rendering no content
+        render json: {}, status: :no_content
       end
 
       def valid_like?

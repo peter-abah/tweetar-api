@@ -18,11 +18,7 @@ class Retweet < ApplicationRecord
 
   default_scope { order(updated_at: :desc) }
 
-  def associations_for_json
-    %i[user tweet]
-  end
-
   def type
-    'retweet'
+    'tweet_action'
   end
 end

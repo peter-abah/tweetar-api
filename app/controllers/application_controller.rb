@@ -1,4 +1,7 @@
 class ApplicationController < ActionController::API
+  include ActionController::ImplicitRender
+  include ActionController::Caching 
+
   include ExceptionHandler
 
   before_action :set_current_user

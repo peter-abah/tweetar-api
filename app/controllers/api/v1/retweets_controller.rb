@@ -12,14 +12,13 @@ module Api
                      Tweet.find(params[:tweet_id]).retweets
                    end
 
-        retweets = paginate(retweets)
-
-        render json: Representer.new(retweets, {}, { user: @current_user }).as_json, status: :ok
+        @tweet_actions = paginate(retweets)
+        render 'api/v1/tweet_actions/index'
       end
 
       def show
-        retweet = Retweet.find(params[:id])
-        render json: Representer.new(retweet, {}, { user: @current_user }).as_json, status: :ok
+        @tweet_action = Retweet.find(params[:id])
+        render 'api/v1/tweet_actions/show'
       end
 
       def create
@@ -27,10 +26,10 @@ module Api
           return render json: { error: 'You already retweeted this tweet' }, status: :unprocessable_entity
         end
 
-        retweet = @current_user.retweets.build(tweet_id: params[:tweet_id])
+        @tweet_action = @current_user.retweets.build(tweet_id: params[:tweet_id])
 
-        if retweet.save
-          render json: Representer.new(retweet.tweet, {}, { user: @current_user }).as_json, status: :ok
+        if @tweet_action.save
+          render 'api/v1/tweet_actions/show'
         else
           render json: { error: retweet.errors.full_messages }, status: :unprocessable_entity
         end
@@ -39,7 +38,9 @@ module Api
       def destroy
         retweet = @current_user.retweets.find_by!(tweet_id: params[:tweet_id])
         retweet.destroy
-        render status: :no_content
+        
+        # rendering empty json instead of no content because jbuilder has a bug with rendering no content
+        render json: {}, status: :no_content
       end
 
       private

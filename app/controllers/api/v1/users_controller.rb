@@ -11,34 +11,33 @@ module Api
           profile_image_attachment: :blob,
           cover_image_attachment: :blob
         ))
-        users = paginate(users)
-        render json: Representer.new(users, {}, { user: @current_user }).as_json, status: :ok
+        @users = paginate(users)
       end
 
       def followers
         users = filter(user.followers)
-        users = paginate(users)
-        render json: Representer.new(users, {}, { user: @current_user }).as_json, status: :ok
+        @users = paginate(users)
+        render 'api/v1/users/index'
       end
 
       def followed_users
         users = filter(user.followed_users)
-        users = paginate(users)
-        render json: Representer.new(users, {}, { user: @current_user }).as_json, status: :ok
+        @users = paginate(users)
+        render 'api/v1/users/index'
       end
 
       def create
-        user = User.create(user_params)
+        @user = User.create(user_params)
 
-        if user.save
-          render json: user_json(user), status: :created
+        if @user.save
+          render 'api/v1/users/auth', status: :created
         else
           render json: { error: user.errors.full_messages.first }, status: :unprocessable_entity
         end
       end
 
       def show
-        render json: Representer.new(user, {}, { user: @current_user }).as_json, status: :ok
+        @user = user
       end
 
       def update
@@ -48,7 +47,8 @@ module Api
         end
 
         if @current_user.update(user_params)
-          render json: user_json(@current_user), status: :ok
+          @user = @current_user
+          render 'api/v1/users/show'
         else
           render json: { error: @current_user.errors.full_messages.first }, status: :unprocessable_entity
         end
@@ -61,7 +61,9 @@ module Api
         end
 
         @current_user.destroy
-        render status: :no_content
+
+        # rendering empty json instead of no content because jbuilder has a bug with rendering no content
+        render json: {}, status: :no_content
       end
 
       private
