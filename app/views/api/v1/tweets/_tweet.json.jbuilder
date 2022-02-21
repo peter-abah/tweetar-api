@@ -1,6 +1,5 @@
 json.tweet do
   json.merge! tweet.as_json
-  json.image_urls { json.array! tweet.image_urls }
   json.liked_by_user tweet.liked_by_user?(@current_user) if @current_user
   json.retweeted_by_user tweet.retweeted_by_user?(@current_user) if @current_user
 
