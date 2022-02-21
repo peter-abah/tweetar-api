@@ -20,7 +20,8 @@ module Api
         if @tweet.save
           render 'api/v1/tweets/show', status: :created
         else
-          render json: { error: @tweet.errors.full_messages.first }, status: :unprocessable_entity
+          errors = ErrorsBuilder.new(@tweet).errors
+          render json: { error: errors }, status: :unprocessable_entity
         end
       end
 
@@ -34,7 +35,8 @@ module Api
         if @tweet.update(tweet_params)
           render 'api/v1/tweets/show'
         else
-          render json: { error: @tweet.errors.full_messages.first }, status: :unprocessable_entity
+          errors = ErrorsBuilder.new(@tweet).errors
+          render json: { error: errors }, status: :unprocessable_entity
         end
       end
 

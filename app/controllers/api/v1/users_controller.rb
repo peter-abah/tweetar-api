@@ -32,7 +32,7 @@ module Api
         if @user.save
           render 'api/v1/users/auth', status: :created
         else
-          render json: { error: user.errors.full_messages.first }, status: :unprocessable_entity
+          render json: { error: ErrorsBuilder.new(@user).errors }, status: :unprocessable_entity
         end
       end
 
@@ -42,7 +42,7 @@ module Api
 
       def update
         if user != @current_user
-          render json: { error: 'forbidden' }, status: :forbidden
+          render json: { error: 'Forbidden can only edit your own profile' }, status: :forbidden
           return
         end
 
@@ -50,7 +50,7 @@ module Api
           @user = @current_user
           render 'api/v1/users/show'
         else
-          render json: { error: @current_user.errors.full_messages.first }, status: :unprocessable_entity
+          render json: { error: ErrorsBuilder.new(@current_user).errors }, status: :unprocessable_entity
         end
       end
 
@@ -78,8 +78,8 @@ module Api
       end
 
       def user_params
-        params.require(:user).
-          permit(:username, :password, :password_confirmation, :first_name, 
+        params.require(:user)
+          .permit(:username, :password, :password_confirmation, :first_name, 
                  :last_name, :email, :profile_image, :cover_image)
       end
     end

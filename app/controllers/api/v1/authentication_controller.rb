@@ -13,7 +13,9 @@ module Api
           @user = user
           render 'api/v1/users/auth', status: :created
         else
-          render json: { error: 'No such user' }, status: :unauthorized
+          render json: { error: 
+            { username: 'Username does not exists'} 
+          }, status: :unauthorized
         end
       end
 
@@ -29,7 +31,9 @@ module Api
       end
 
       def handle_unauthenticated
-        render json: { error: 'Incorrect password' }, status: :unauthorized
+        render json: { error: 
+          { password: 'Incorrect password' }
+        }, status: :unauthorized
       end
     end
   end
