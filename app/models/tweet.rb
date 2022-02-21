@@ -16,7 +16,7 @@
 class Tweet < ApplicationRecord
   include Rails.application.routes.url_helpers
 
-  validates :body, presence: true, length: { in: 2..250 }
+  validates :body, presence: true, length: { in: 1..250 }
   validates :images, limit: { min: 0, max: 4 }, content_type: %i[png jpg jpeg gif]
 
   belongs_to :user, counter_cache: true
