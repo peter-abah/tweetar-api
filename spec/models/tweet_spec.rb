@@ -26,7 +26,7 @@ RSpec.describe Tweet, type: :model do
 
   describe 'validations' do
     it { should validate_presence_of(:body) }
-    it { should validate_length_of(:body).is_at_least(2) }
+    it { should validate_length_of(:body).is_at_least(1) }
     it { should validate_length_of(:body).is_at_most(250) }
   end
 end

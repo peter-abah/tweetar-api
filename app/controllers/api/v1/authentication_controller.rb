@@ -14,7 +14,7 @@ module Api
           render 'api/v1/users/auth', status: :created
         else
           render json: { error: 
-            { username: 'Username does not exists'} 
+            { username: 'No such user'} 
           }, status: :unauthorized
         end
       end

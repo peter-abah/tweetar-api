@@ -29,7 +29,7 @@ RSpec.describe User, type: :model do
 
   describe 'validations' do
     it { should validate_presence_of(:username) }
-    it { should validate_uniqueness_of(:username) }
+    it { should validate_uniqueness_of(:username).ignoring_case_sensitivity }
     it { should validate_length_of(:username).is_at_least(2) }
 
     it { should validate_presence_of(:first_name) }
@@ -44,6 +44,7 @@ RSpec.describe User, type: :model do
     it { should validate_length_of(:password).is_at_least(8) }
 
     it { should validate_presence_of(:email) }
+    it { should validate_uniqueness_of(:email).ignoring_case_sensitivity }
 
     context 'should validate correct usernames' do
       it 'validates a correct username (with only letters, numbers and underscores' do
