@@ -19,11 +19,17 @@ module Filterable
     parent_id ? relation.where(parent_id: parent_id) : relation
   end
 
+  def filter_images(relation)
+    option = params[:images]
+    option == 'attached' ? relation.filter_with_images : relation
+  end
+
   def methods
     [
       method(:filter_user),
       method(:filter_parent),
-      method(:filter_query)
+      method(:filter_query),
+      method(:filter_images)
     ]
   end
 end

@@ -41,6 +41,10 @@ class Tweet < ApplicationRecord
     where('LOWER(body) LIKE ?', query)
   end
 
+  def self.filter_with_images
+    joins('INNER JOIN active_storage_attachments as a ON tweets.id = a.record_id AND a.record_type = \'Tweet\'')
+  end
+
   def as_json(options = {})
     options = options.merge(methods: :image_urls)
     super(options)
