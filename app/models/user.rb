@@ -66,7 +66,7 @@ class User < ApplicationRecord
 
   def self.filter_by_query(query)
     query = "%#{query.downcase}%"
-    where("CONCAT(first_name, ' ', last_name) LIKE ?", query)
+    where("LOWER(CONCAT(first_name, ' ', last_name)) LIKE ?", query)
   end
 
   def as_json(options = {})

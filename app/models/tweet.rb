@@ -38,7 +38,7 @@ class Tweet < ApplicationRecord
 
   def self.filter_by_query(query)
     query = "%#{query.downcase}%"
-    where('body LIKE ?', query)
+    where('LOWER(body) LIKE ?', query)
   end
 
   def as_json(options = {})
