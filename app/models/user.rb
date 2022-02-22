@@ -28,26 +28,26 @@ class User < ApplicationRecord
   validates :bio, length: { maximum: 250 }
   validates :email, presence: true, email: true, uniqueness: true
 
-  has_many :tweets
+  has_many :tweets, dependent: :destroy
   has_many :retweets, lambda {
                         includes(
                           user: { profile_image_attachment: :blob, cover_image_attachment: :blob },
                           tweet: { images_attachments: :blob }
                         )
-                      }
+                      }, dependent: :destroy
 
   has_many :likes, lambda {
                      includes(
                        user: { profile_image_attachment: :blob, cover_image_attachment: :blob },
                        tweet: { images_attachments: :blob }
                      )
-                   }
+                   }, dependent: :destroy
 
   has_one_attached :profile_image, dependent: :destroy
   has_one_attached :cover_image, dependent: :destroy
 
-  has_many :received_follows, foreign_key: :followed_id, class_name: 'Follow'
-  has_many :sent_follows, foreign_key: :follower_id, class_name: 'Follow'
+  has_many :received_follows, foreign_key: :followed_id, class_name: 'Follow', dependent: :destroy
+  has_many :sent_follows, foreign_key: :follower_id, class_name: 'Follow', dependent: :destroy
   has_many :followers, lambda {
                          includes(
                            profile_image_attachment: :blob,
