@@ -26,7 +26,6 @@ class User < ApplicationRecord
   validates :username, presence: true, uniqueness: true, format: { with: /\A\w+\z/ }, length: { minimum: 2 }
   validates :password, presence: true, length: { minimum: 8 }, on: :create
   validates :first_name, presence: true
-  validates :last_name, presence: true
   validates :bio, length: { maximum: 250 }
   validates :email, presence: true, email: true, uniqueness: true
 
