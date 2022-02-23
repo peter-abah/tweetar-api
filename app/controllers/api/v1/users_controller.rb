@@ -48,7 +48,7 @@ module Api
 
         if @current_user.update(user_params)
           @user = @current_user
-          render 'api/v1/users/show'
+          render 'api/v1/users/auth'
         else
           render json: { error: ErrorsBuilder.new(@current_user).errors }, status: :unprocessable_entity
         end
