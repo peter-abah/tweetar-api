@@ -19,6 +19,6 @@ class Retweet < ApplicationRecord
   default_scope { order(updated_at: :desc) }
 
   def type
-    'tweet_action'
+    'retweet'
   end
 end

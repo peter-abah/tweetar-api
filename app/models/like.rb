@@ -19,6 +19,6 @@ class Like < ApplicationRecord
   default_scope { order(updated_at: :desc) }
 
   def type
-    'tweet_action'
+    'like'
   end
 end
