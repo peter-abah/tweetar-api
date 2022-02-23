@@ -9,6 +9,7 @@ Rails.application.routes.draw do
           member do
             get 'followers'
             get 'followed_users'
+            get 'recommended_follows', to: 'follows#recommended'
             post 'follow', to: 'follows#create'
             delete 'follow', to: 'follows#destroy'
           end

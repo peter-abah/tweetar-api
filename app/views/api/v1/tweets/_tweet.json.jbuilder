@@ -17,3 +17,4 @@ end
 
 json.id tweet.id
 json.data_id "#{tweet.type}-#{tweet.id}"
+json.type tweet.type

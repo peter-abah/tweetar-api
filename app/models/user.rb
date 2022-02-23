@@ -87,6 +87,15 @@ class User < ApplicationRecord
     cover_image.attached? ? rails_blob_url(cover_image, disposition: 'attachment') : nil
   end
 
+  def recommended_follows
+    users = followed_users.joins(:followed_users).includes(:followed_users)
+
+    users.reduce([]) do |res, followed_user|
+      recommended = followed_user.followed_users.where.not(id: followed_users.ids)
+      res.concat(recommended)
+    end
+  end
+
   def followed_by_user?(user)
     received_follows.exists?(follower: user)
   end

@@ -18,6 +18,11 @@ class Retweet < ApplicationRecord
 
   default_scope { order(updated_at: :desc) }
 
+  def as_json(options = {})
+    options = options.merge(methods: :type)
+    super(options)
+  end
+
   def type
     'retweet'
   end

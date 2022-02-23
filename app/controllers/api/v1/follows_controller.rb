@@ -1,7 +1,9 @@
 module Api
   module V1
     class FollowsController < ApplicationController
-      before_action :authenticate_request!
+      include Paginate
+
+      before_action :authenticate_request!, only: %i[create destroy]
 
       def create
         if user == @current_user
@@ -37,10 +39,16 @@ module Api
         render 'api/v1/users/show'
       end
 
+      def recommended
+        @users = Kaminari.paginate_array(user.recommended_follows)
+        @users = paginate(@users)
+        render 'api/v1/users/index'
+      end
+
       private
 
       def user
-        User.find(params[:id])
+        @user ||= User.find(params[:id])
       end
     end
   end

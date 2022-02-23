@@ -68,4 +68,34 @@ RSpec.describe 'Follows', type: :request do
       expect(followed_id).to eq(followed_user.id)
     end
   end
+
+  describe 'GET /users/:user_id/recommended_follows' do
+    let!(:followed) { FactoryBot.create(:user) }
+    let!(:recommended) { FactoryBot.create(:user) }
+    let!(:user) { FactoryBot.create(:user) }
+    let!(:followed_by_both) { FactoryBot.create(:user) }
+
+    before do
+      Follow.create!(follower_id: user.id, followed_id: followed.id)
+      Follow.create!(follower_id: followed.id, followed_id: recommended.id)
+      Follow.create!(follower_id: user.id, followed_id: followed_by_both.id)
+      Follow.create!(follower_id: followed.id, followed_id: followed_by_both.id)
+    end
+
+    it 'returns followers of user followed users' do
+      get "/api/v1/users/#{user.id}/recommended_follows"
+
+      recommended_id = JSON.parse(response.body)['list'][0]['id']
+      expect(response).to have_http_status(:ok)
+      expect(recommended_id).to eq(recommended.id)
+    end
+
+    it 'does not return users that user already follows' do
+      get "/api/v1/users/#{user.id}/recommended_follows"
+  
+      ids = JSON.parse(response.body)['list'].map { |user| user['id'] }
+      expect(response).to have_http_status(:ok)
+      expect(ids).not_to include(followed_by_both.id)
+    end
+  end
 end

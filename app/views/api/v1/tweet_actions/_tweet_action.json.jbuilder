@@ -1,7 +1,8 @@
 
 hash = {
   id: tweet_action.id,
-  data_id: "#{tweet_action.type}-#{tweet_action.id}"
+  data_id: "#{tweet_action.type}-#{tweet_action.id}",
+  type: tweet_action.type
 }
 
 json.partial! 'api/v1/tweets/tweet',
