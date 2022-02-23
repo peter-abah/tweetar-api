@@ -27,6 +27,8 @@ class User < ApplicationRecord
   validates :password, presence: true, length: { minimum: 8 }, on: :create
   validates :first_name, presence: true
   validates :bio, length: { maximum: 250 }
+  validates :location, length: { maximum: 100 }
+  validates :website, length: { maximum: 100 }
   validates :email, presence: true, email: true, uniqueness: true
 
   has_many :tweets, dependent: :destroy

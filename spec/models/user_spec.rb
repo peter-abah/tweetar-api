@@ -36,9 +36,9 @@ RSpec.describe User, type: :model do
 
     it { should validate_presence_of(:first_name) }
 
-    it { should validate_presence_of(:last_name) }
-
     it { should validate_length_of(:bio).is_at_most(250) }
+    it { should validate_length_of(:website).is_at_most(100) }
+    it { should validate_length_of(:location).is_at_most(100) }
 
     it { should validate_presence_of(:password) }
     it { should validate_length_of(:password).is_at_least(8) }
