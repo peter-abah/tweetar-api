@@ -7,9 +7,9 @@ class FeedGenerator
 
   def feed
     tweets = users.reduce([]) do |acc, user|
-      acc.concat(user.tweets, user.retweets, user.likes)
+      acc.concat(user.tweets.parent?, user.retweets, user.likes)
     end
-    tweets.concat(current_user.tweets)
+    tweets.concat(current_user.tweets.parent?)
 
     tweets.count < 25 ? pad_tweets(tweets) : tweets
   end

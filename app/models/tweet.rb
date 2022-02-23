@@ -35,6 +35,7 @@ class Tweet < ApplicationRecord
   has_many_attached :images, dependent: :destroy
 
   default_scope { order(updated_at: :desc) }
+  scope :parent?, -> { where(parent: nil) }
 
   def self.filter_by_query(query)
     query = "%#{query.downcase}%"
