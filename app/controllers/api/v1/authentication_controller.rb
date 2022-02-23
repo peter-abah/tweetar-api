@@ -9,7 +9,7 @@ module Api
       def create
         if user
           raise AuthenticationError unless user.authenticate(params.require(:password))
-          
+
           @user = user
           render 'api/v1/users/auth', status: :created
         else
