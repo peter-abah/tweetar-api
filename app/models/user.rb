@@ -3,17 +3,19 @@
 # Table name: users
 #
 #  id                   :integer          not null, primary key
-#  username             :string
+#  username             :citext
 #  first_name           :string
 #  last_name            :string
 #  password_digest      :string
 #  bio                  :text             default("")
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
-#  email                :string
+#  email                :citext
 #  followers_count      :integer          default("0")
 #  followed_users_count :integer          default("0")
 #  tweets_count         :integer          default("0")
+#  location             :string           default("")
+#  website              :string           default("")
 #
 
 class User < ApplicationRecord

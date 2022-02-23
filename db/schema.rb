@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_22_114949) do
+ActiveRecord::Schema.define(version: 2022_02_23_213434) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -96,6 +96,8 @@ ActiveRecord::Schema.define(version: 2022_02_22_114949) do
     t.integer "followers_count", default: 0
     t.integer "followed_users_count", default: 0
     t.integer "tweets_count", default: 0
+    t.string "location", default: ""
+    t.string "website", default: ""
     t.index ["email"], name: "index_users_on_email"
     t.index ["username"], name: "index_users_on_username"
   end
