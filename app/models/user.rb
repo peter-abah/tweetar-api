@@ -93,10 +93,12 @@ class User < ApplicationRecord
   def recommended_follows
     users = followed_users.joins(:followed_users).includes(:followed_users)
 
-    users.reduce([]) do |res, followed_user|
-      recommended = followed_user.followed_users.where.not(id: followed_users.ids)
+    result = users.reduce([]) do |res, followed_user|
+      recommended = followed_user.followed_users.where.not(id: [*followed_users.ids, id])
       res.concat(recommended)
     end
+
+    result.uniq
   end
 
   def followed_by_user?(user)
