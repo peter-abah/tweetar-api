@@ -45,6 +45,8 @@ class User < ApplicationRecord
                        tweet: { images_attachments: :blob }
                      )
                    }, dependent: :destroy
+  has_many :bookmarks, dependent: :destroy
+  has_many :bookmarked_tweets, through: :bookmarks, source: :tweet
 
   has_one_attached :profile_image, dependent: :destroy
   has_one_attached :cover_image, dependent: :destroy
