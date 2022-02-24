@@ -27,6 +27,8 @@ RSpec.describe User, type: :model do
     it { should have_many(:followed_users).class_name('User') }
     it { should have_many(:retweets) }
     it { should have_many(:likes) }
+    it { should have_many(:bookmarks) }
+    it { should have_many(:bookmarked_tweets).class_name('Tweet') }
   end
 
   describe 'validations' do

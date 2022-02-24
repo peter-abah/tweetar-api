@@ -32,6 +32,8 @@ class Tweet < ApplicationRecord
     tweet: { images_attachments: :blob }
   )}, dependent: :destroy
 
+  has_many :bookmarks
+
   has_many_attached :images, dependent: :destroy
 
   default_scope { order(updated_at: :desc) }
@@ -61,6 +63,10 @@ class Tweet < ApplicationRecord
 
   def retweeted_by_user?(user)
     retweets.exists?(user: user)
+  end
+
+  def bookmarked_by_user?(user)
+    bookmarks.exists?(user: user)
   end
 
   def type

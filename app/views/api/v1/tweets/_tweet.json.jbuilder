@@ -2,6 +2,7 @@ json.tweet do
   json.merge! tweet.as_json
   json.liked_by_user tweet.liked_by_user?(@current_user) if @current_user
   json.retweeted_by_user tweet.retweeted_by_user?(@current_user) if @current_user
+  json.bookmarked_by_user tweet.bookmarked_by_user?(@current_user) if @current_user
 
   # json.cache! ['v1', tweet.user], expires_in: 1.minutes do
     json.user { json.partial! 'api/v1/users/user', locals: { user: tweet.user } }

@@ -28,6 +28,8 @@ Rails.application.routes.draw do
           get 'replies', member: true
         end
 
+        resources :bookmarks, only: %i[index create destroy]
+
         resources :likes, :retweets, only: :show
       end
     end

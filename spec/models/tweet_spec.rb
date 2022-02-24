@@ -22,6 +22,7 @@ RSpec.describe Tweet, type: :model do
     it { should have_many(:replies).class_name('Tweet') }
     it { should have_many(:retweets) }
     it { should have_many(:likes) }
+    it { should have_many(:bookmarks) }
   end
 
   describe 'validations' do
