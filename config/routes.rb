@@ -23,12 +23,13 @@ Rails.application.routes.draw do
         resources :tweets, except: %i[edit new] do
           resource :retweets, only: %i[create destroy]
           resource :likes, only: %i[create destroy]
+          resource :bookmarks, only: %i[create destroy]
 
           resources :retweets, :likes, only: :index
           get 'replies', member: true
         end
 
-        resources :bookmarks, only: %i[index create destroy]
+        resources :bookmarks, only: :index
 
         resources :likes, :retweets, only: :show
       end

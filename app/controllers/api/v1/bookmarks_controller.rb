@@ -13,13 +13,11 @@ module Api
       end
 
       def create
-        tweet_id = params[:bookmark][:tweet_id]
-        if @current_user.bookmarks.exists?(tweet_id: tweet_id)
-          render json: { error: 'You already bookmarked this tweet' }, status: :unprocessable_entity
-          return
+        unless valid_bookmark?
+          return render json: { error: 'You already bookmarked this tweet' }, status: :unprocessable_entity
         end
 
-        @tweet_action = @current_user.bookmarks.build(bookmark_params)
+        @tweet_action = @current_user.bookmarks.build(tweet_id: params[:tweet_id])
 
         if @tweet_action.save
           render 'api/v1/tweet_actions/show', status: :created
@@ -36,7 +34,7 @@ module Api
 
 
       def destroy
-        bookmark = @current_user.bookmarks.find(params[:id])
+        bookmark = @current_user.bookmarks.find_by!(tweet_id: params[:tweet_id])
         bookmark.destroy
 
         # rendering empty json instead of no content because jbuilder has a bug with rendering no content
@@ -44,6 +42,10 @@ module Api
       end
 
       private
+
+      def valid_bookmark?
+        !@current_user.bookmarks.exists?(tweet_id: params[:tweet_id])
+      end
 
       def bookmark
         Bookmark.includes(bookmark_includes_options).find(params[:id])
@@ -59,10 +61,6 @@ module Api
             images_attachments: :blob
           }
         }
-      end
-
-      def bookmark_params
-        params.require(:bookmark).permit(:tweet_id)
       end
     end
   end

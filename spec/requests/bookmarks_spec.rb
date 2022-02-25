@@ -4,7 +4,7 @@ RSpec.describe "Bookmarks", type: :request do
   let!(:user) { FactoryBot.create(:user) }
   let!(:user2) { FactoryBot.create(:user) }
   let!(:tweet) { FactoryBot.create(:tweet) }
-  let!(:bookmark) { FactoryBot.create(:bookmark, user: user) }
+  let(:tweet2) { FactoryBot.create(:tweet) }
 
   describe "GET /bookmarks" do
     let!(:bookmarks) { FactoryBot.create_list(:bookmark, 50, user: user) }
@@ -49,28 +49,26 @@ RSpec.describe "Bookmarks", type: :request do
 
   describe 'POST /bookmarks' do
     it 'returns unauthorized if authentication header is missing' do
-      post '/api/v1/bookmarks', params: { bookmark: { tweet_id: tweet.id } }
+      post "/api/v1/tweets/#{tweet.id}/bookmarks"
       expect(response).to have_http_status(:unauthorized)
     end
 
     it 'returns unauthorized if authentication token is invalid' do
-      post '/api/v1/bookmarks', params: { bookmark: { tweet_id: tweet.id } },
-                                                 headers: { 'Authorization' => 'awrongtoken123456' }
+      post "/api/v1/tweets/#{tweet.id}/bookmarks", headers: { 'Authorization' => 'awrongtoken123456' }
       expect(response).to have_http_status(:unauthorized)
     end
 
-
     it 'returns unprocessable_entity if user has already bookmarked the tweet' do
-      FactoryBot.create(:bookmark, tweet: tweet, user: user)
-  
-      post '/api/v1/bookmarks', params: { bookmark: { tweet_id: tweet.id } }, 
-                                headers: { 'Authorization' => AuthenticationTokenService.call(user.id) }
+      FactoryBot.create(:bookmark, tweet: tweet2, user: user)
+
+      post "/api/v1/tweets/#{tweet2.id}/bookmarks",
+           headers: { 'Authorization' => AuthenticationTokenService.call(user.id) }
       expect(response).to have_http_status(:unprocessable_entity)
     end
 
     it 'bookmarks a tweet if user is authenticated' do
-      post '/api/v1/bookmarks', params: { bookmark: { tweet_id: tweet.id } }, 
-                                headers: { 'Authorization' => AuthenticationTokenService.call(user.id) }
+      post "/api/v1/tweets/#{tweet.id}/bookmarks",
+           headers: { 'Authorization' => AuthenticationTokenService.call(user.id) }
 
       json = JSON.parse(response.body)
 
@@ -81,24 +79,25 @@ RSpec.describe "Bookmarks", type: :request do
   end
 
   describe 'DELETE /bookmarks/:id' do
+    let!(:bookmark) { FactoryBot.create(:bookmark, user: user, tweet: tweet) }
 
     it 'returns unauthorized if authentication header is missing' do
-      delete "/api/v1/bookmarks/#{bookmark.id}"
+      delete "/api/v1/tweets/#{tweet.id}/bookmarks"
       expect(response).to have_http_status(:unauthorized)
     end
 
     it 'returns unauthorized if authentication token is invalid' do
-      delete "/api/v1/bookmarks/#{bookmark.id}", headers: { 'Authorization' => 'awrongtoken123456' }
+      delete "/api/v1/tweets/#{tweet.id}/bookmarks", headers: { 'Authorization' => 'awrongtoken123456' }
       expect(response).to have_http_status(:unauthorized)
     end
 
     it 'returns not_found if the bookmark does not belong to user' do
-      delete "/api/v1/bookmarks/#{bookmark.id}", headers: { 'Authorization' => AuthenticationTokenService.call(user2.id) }
+      delete "/api/v1/tweets/#{tweet.id}/bookmarks", headers: { 'Authorization' => AuthenticationTokenService.call(user2.id) }
       expect(response).to have_http_status(:not_found)
     end
 
     it 'delete bookmark if user is authorized' do
-      delete "/api/v1/bookmarks/#{bookmark.id}", headers: { 'Authorization' => AuthenticationTokenService.call(user.id) }
+      delete "/api/v1/tweets/#{tweet.id}/bookmarks", headers: { 'Authorization' => AuthenticationTokenService.call(user.id) }
 
       expect(response).to have_http_status(:no_content)
       expect(Bookmark.exists?(bookmark.id)).to eq(false)
