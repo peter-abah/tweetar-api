@@ -53,21 +53,8 @@ class User < ApplicationRecord
 
   has_many :received_follows, foreign_key: :followed_id, class_name: 'Follow', dependent: :destroy
   has_many :sent_follows, foreign_key: :follower_id, class_name: 'Follow', dependent: :destroy
-  has_many :followers, lambda {
-                         includes(
-                           profile_image_attachment: :blob,
-                           cover_image_attachment: :blob
-                         )
-                       }, through: :received_follows, source: :follower
-
-  has_many :followed_users, lambda {
-                              includes(
-                                :tweets,
-                                :retweets,
-                                profile_image_attachment: :blob,
-                                cover_image_attachment: :blob
-                              )
-                            }, through: :sent_follows, source: :followed
+  has_many :followers, through: :received_follows, source: :follower
+  has_many :followed_users, through: :sent_follows, source: :followed
 
   def self.filter_by_query(query)
     query = "%#{query.downcase}%"
@@ -93,13 +80,14 @@ class User < ApplicationRecord
   end
 
   def recommended_follows
-    users = followed_users.joins(:followed_users).includes(:followed_users)
+    users = followed_users.joins(:followed_users).includes(:sent_follows)
 
     result = users.reduce([]) do |res, followed_user|
-      recommended = followed_user.followed_users.where.not(id: [*followed_users.ids, id])
+      recommended = followed_user.followed_users
       res.concat(recommended)
     end
 
+    result = result.reject { |user| [*followed_user_ids, id].include? user.id }
     result.uniq
   end
 
