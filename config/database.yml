@@ -84,6 +84,3 @@ test:
 production:
   <<: *default
   url: <%= ENV['DATABASE_URL'] %>
-  database: tweeter_api_production
-  username: tweeter_api
-  password: <%= ENV["TWEETER_API_DATABASE_PASSWORD"] %>
